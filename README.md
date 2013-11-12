@@ -32,8 +32,6 @@ Boostrapping
 Deploying to Heroku, with AWS for static media
 ==============================================
 
-I love heroku. It's easy, it scales well, and it takes care of most of the stuff I don't want to think about.  Here's how to get artechetype running on it:
-
 Preparing
 ---------
 
