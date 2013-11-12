@@ -1,0 +1,40 @@
+from django.db import models
+
+# Create your models here.
+class Screen(models.Model):
+    name = models.CharField(max_length=255)
+    has_vas = models.BooleanField(default=False)
+    has_tto = models.BooleanField(default=False)
+
+
+class SurveyPath(models.Model):
+    screen_1 = models.ForeignKey(Screen)
+    screen_2 = models.ForeignKey(Screen)
+    screen_3 = models.ForeignKey(Screen)
+    screen_4 = models.ForeignKey(Screen)
+    screen_5 = models.ForeignKey(Screen)
+    screen_6 = models.ForeignKey(Screen)
+    screen_7 = models.ForeignKey(Screen)
+    screen_8 = models.ForeignKey(Screen)
+    screen_9 = models.ForeignKey(Screen)
+    screen_10 = models.ForeignKey(Screen)
+    screen_11 = models.ForeignKey(Screen)
+    screen_12 = models.ForeignKey(Screen)
+    screen_13 = models.ForeignKey(Screen)
+    screen_14 = models.ForeignKey(Screen)
+    screen_15 = models.ForeignKey(Screen)
+    screen_16 = models.ForeignKey(Screen)
+    screen_17 = models.ForeignKey(Screen)
+    screen_18 = models.ForeignKey(Screen)
+    screen_19 = models.ForeignKey(Screen)
+    screen_20 = models.ForeignKey(Screen)
+    screen_21 = models.ForeignKey(Screen)
+    screen_22 = models.ForeignKey(Screen)
+    screen_23 = models.ForeignKey(Screen)
+    screen_24 = models.ForeignKey(Screen)
+    screen_25 = models.ForeignKey(Screen)
+    screen_26 = models.ForeignKey(Screen)
+    screen_27 = models.ForeignKey(Screen)
+    screen_28 = models.ForeignKey(Screen)
+    screen_29 = models.ForeignKey(Screen)
+    screen_30 = models.ForeignKey(Screen)
