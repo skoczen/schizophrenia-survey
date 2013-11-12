@@ -1,6 +1,6 @@
 from fabric.api import *
 
-env.PROJECT_NAME = "pdxschoolhack"
+env.PROJECT_NAME = "schizophrenia-survey"
 env.GITHUB_USER = "skoczen"
 env.GITHUB_REPO = env.PROJECT_NAME
 env.VIRTUALENV_NAME = env.PROJECT_NAME
@@ -24,15 +24,18 @@ def initial_setup():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip install -r requirements.unstable.txt" % env)
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip freeze requirements.unstable.txt > requirements.txt" % env)
 
+
 def run_ve(cmd):
     env.cmd = cmd
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate;cd project;%(cmd)s" % env)
+
 
 def deploy():
     run_ve("./manage.py collectstatic --noinput --settings=envs.live")
     run_ve("./manage.py compress --force --settings=envs.live")
     run_ve("./manage.py sync_static --gzip --expires --settings=envs.live")
     deploy_code()
+
 
 def deploy_code():
     run_ve("git push heroku live:master")

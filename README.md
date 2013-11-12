@@ -1,29 +1,26 @@
-Artechetype (terrible pun) is a grab-and-go starter django+js I use when making new digital projects.  You're welcome to as well, and if you come across improvements, pull requests are welcome.
+This is the repository for the Schizophrenia Survey contract work between Steven Skoczen and Informatics Experts.
 
-NOTE: I'm still working on it. Don't use it quite yet.
+Information on how to bootstrap and deploy the project below.
 
-Grab it and go
-==============
 
-1. Set up your new repo, say `github.com:myusername/mynewproject.git`
+Boostrapping
+============
 
-2. Clone artechetype into a local directory.
+1. Clone this repo
 	
 	```bash
-	git clone git@github.com:skoczen/artechetype.git mynewproject.git
+	git clone git@github.com:skoczen/schizophrenia-survey.git
 	```
 
-3. Set `PROJECT_NAME`, `GITHUB_REPO` and any other env settings you need in `fabfile.py`
+2. Set up the your virtualenv, and `pip install fabric`
 
-4. Set up the your virtualenv, and `pip install fabric`
-
-5. Set up your remotes manually, or by use the fab helper command.
+3. Set up your remotes manually, or by use the fab helper command.
 	
 	```bash
 	fab initial_setup
 	```
 
-5. You're set. 
+4. You're set. 
 	
 	```bash
 	cd project

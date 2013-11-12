@@ -1,6 +1,6 @@
 boto
 BeautifulSoup<4.0
-django
+django<1.6
 django-analytical>=0.12.1
 django-annoying
 django_compressor
@@ -13,6 +13,5 @@ fabric
 gunicorn
 lxml
 psycopg2
-salad
 south
 versiontools
