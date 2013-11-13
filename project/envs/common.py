@@ -87,18 +87,19 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.admin',
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
 
     "analytical",
     "annoying",
     "compressor",
     "django_extensions",
-    "lettuce.django",
     "gunicorn",
     "south",
 
     "main_site",
+    "survey",
+
     
 )
 
