@@ -14,37 +14,27 @@ env.SERVERS = {
     "staging": "qi-schizophrenia-staging",
 }
 
-def initial_setup():
-    local("echo cd `pwd` >> ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/postactivate" % env)
-    local("git remote rename origin artechetype")
-    local("git remote add origin git@github.com:%(GITHUB_USER)s/%(GITHUB_REPO)s.git" % env)
-    if env.HEROKU_APP_NAME:
-        if env.HEROKU_ACCOUNT:
-            local("git remote add heroku git@heroku.%(HEROKU_ACCOUNT)s:%(HEROKU_APP_NAME)s.git" % env)
-        else:
-            local("git remote add heroku git@heroku.com:%(HEROKU_APP_NAME)s.git" % env)
-        local("heroku create --stack cedar %(HEROKU_APP_NAME)s" % env)
 
-    local("git push -u origin")
+def refreeze():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip install -r requirements.unstable.txt" % env)
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip freeze requirements.unstable.txt > requirements.txt" % env)
 
 
 def run_ve(cmd):
     env.cmd = cmd
-    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate;cd project;%(cmd)s" % env)
+    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate;%(cmd)s" % env)
 
 
 def deploy(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
-    run_ve("./manage.py collectstatic --noinput --settings=envs.live %(app_string)s" % env)
-    run_ve("./manage.py compress --force --settings=envs.live %(app_string)s" % env)
-    run_ve("./manage.py sync_static --gzip --expires --settings=envs.live %(app_string)s" % env)
+    run_ve("./manage.py collectstatic --noinput --settings=envs.live" % env)
+    run_ve("./manage.py compress --force --settings=envs.live" % env)
+    run_ve("./manage.py sync_static --gzip --expires --settings=envs.live" % env)
     deploy_code()
 
 
 def deploy_code():
-    run_ve("git push heroku live:master %(app_string)s" % env)
-    run_ve("heroku run project/manage.py syncdb %(app_string)s" % env)
-    run_ve("heroku run project/manage.py migrate %(app_string)s" % env)
+    run_ve("git push heroku master:master" % env)
+    run_ve("heroku run manage.py syncdb --settings=envs.live" % env)
+    run_ve("heroku run manage.py migrate --settings=envs.live" % env)
     run_ve("heroku restart")

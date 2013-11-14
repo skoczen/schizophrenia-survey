@@ -53,11 +53,9 @@ Preparing
 3. I use this set of addons in almost every project
 
 	```bash
-heroku addons:add custom_domains:basic
-heroku addons:add zerigo_dns:basic
-heroku addons:add memcache:5mb
-heroku addons:add logging:expanded
-heroku addons:add redistogo:nano
+heroku addons:add zerigo_dns:basic --app qi-schizophrenia-live
+heroku addons:add memcachier --app qi-schizophrenia-live
+heroku addons:add redistogo:nano --app qi-schizophrenia-live
 	```
 
 4. Set up your domains

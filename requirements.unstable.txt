@@ -1,5 +1,4 @@
 boto
-BeautifulSoup<4.0
 django<1.6
 django-analytical>=0.12.1
 django-annoying

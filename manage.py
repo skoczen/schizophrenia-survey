@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 from django.core.management import execute_manager
+from os.path import abspath, join, dirname
+from sys import path
+
+PROJECT_ROOT = abspath(join(dirname(__file__), "project"))
+path.insert(0, PROJECT_ROOT)
+
 import imp
 try:
     imp.find_module('settings') # Assumed to be in the same directory.
