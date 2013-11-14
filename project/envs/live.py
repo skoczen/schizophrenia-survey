@@ -1,4 +1,7 @@
+from memcacheify import memcacheify
+from postgresify import postgresify
 from envs.common import *
+
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -9,6 +12,8 @@ STATIC_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 COMPRESS_URL = STATIC_URL
 FAVICON_URL = "%sfavicon.ico" % STATIC_URL
 
+CACHES = memcacheify()
+DATABASES = postgresify()
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = "backends.CachedS3BotoStorage"
 COMPRESS_STORAGE = STATICFILES_STORAGE
