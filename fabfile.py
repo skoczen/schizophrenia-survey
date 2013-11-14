@@ -7,7 +7,12 @@ env.VIRTUALENV_NAME = env.PROJECT_NAME
 env.HEROKU_APP_NAME = env.PROJECT_NAME
 # If you're using https://github.com/ddollar/heroku-accounts
 env.HEROKU_ACCOUNT = "personal"
+env.app_string = ""
 
+env.SERVERS = {
+    "live": "qi-schizophrenia-live",
+    "staging": "qi-schizophrenia-staging",
+}
 
 def initial_setup():
     local("echo cd `pwd` >> ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/postactivate" % env)
@@ -30,15 +35,16 @@ def run_ve(cmd):
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate;cd project;%(cmd)s" % env)
 
 
-def deploy():
-    run_ve("./manage.py collectstatic --noinput --settings=envs.live")
-    run_ve("./manage.py compress --force --settings=envs.live")
-    run_ve("./manage.py sync_static --gzip --expires --settings=envs.live")
+def deploy(target="staging"):
+    env.app_string = "--app %s" % env.SERVERS[target]
+    run_ve("./manage.py collectstatic --noinput --settings=envs.live %(app_string)s" % env)
+    run_ve("./manage.py compress --force --settings=envs.live %(app_string)s" % env)
+    run_ve("./manage.py sync_static --gzip --expires --settings=envs.live %(app_string)s" % env)
     deploy_code()
 
 
 def deploy_code():
-    run_ve("git push heroku live:master")
-    run_ve("heroku run project/manage.py syncdb")
-    run_ve("heroku run project/manage.py migrate")
+    run_ve("git push heroku live:master %(app_string)s" % env)
+    run_ve("heroku run project/manage.py syncdb %(app_string)s" % env)
+    run_ve("heroku run project/manage.py migrate %(app_string)s" % env)
     run_ve("heroku restart")
