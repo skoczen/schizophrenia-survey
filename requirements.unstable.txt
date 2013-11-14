@@ -1,3 +1,4 @@
+beautifulsoup
 boto
 django<1.6
 django-analytical>=0.12.1
