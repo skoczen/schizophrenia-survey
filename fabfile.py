@@ -8,6 +8,7 @@ env.HEROKU_APP_NAME = env.PROJECT_NAME
 # If you're using https://github.com/ddollar/heroku-accounts
 env.HEROKU_ACCOUNT = "personal"
 env.app_string = ""
+env.DEV_DB_URL = "postgres://@localhost:5432/schizophrenia"
 
 env.SERVERS = {
     "live": "qi-schizophrenia-live",
@@ -27,14 +28,15 @@ def run_ve(cmd):
 
 def deploy(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
-    run_ve("./manage.py collectstatic --noinput --settings=envs.live" % env)
-    run_ve("./manage.py compress --force --settings=envs.live" % env)
-    run_ve("./manage.py sync_static --gzip --expires --settings=envs.live" % env)
-    deploy_code()
+    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py collectstatic --noinput --settings=envs.live" % env)
+    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py compress --force --settings=envs.live" % env)
+    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py sync_static --gzip --expires --settings=envs.live" % env)
+    deploy_code(target=target)
 
 
-def deploy_code():
+def deploy_code(target="staging"):
+    env.app_string = "--app %s" % env.SERVERS[target]
     run_ve("git push heroku master:master" % env)
-    run_ve("heroku run manage.py syncdb --settings=envs.live" % env)
-    run_ve("heroku run manage.py migrate --settings=envs.live" % env)
-    run_ve("heroku restart")
+    run_ve("heroku run python manage.py syncdb --settings=envs.live %(app_string)s" % env)
+    run_ve("heroku run python manage.py migrate --settings=envs.live %(app_string)s" % env)
+    run_ve("heroku restart %(app_string)s")
