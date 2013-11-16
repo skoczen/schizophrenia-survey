@@ -28,9 +28,9 @@ def run_ve(cmd):
 
 def deploy(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
-    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py collectstatic --noinput --settings=envs.live" % env)
-    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py compress --force --settings=envs.live" % env)
-    run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py sync_static --gzip --expires --settings=envs.live" % env)
+    # run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py collectstatic --noinput --settings=envs.live" % env)
+    # run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py compress --force --settings=envs.live" % env)
+    # run_ve("export DATABASE_URL=%(DEV_DB_URL)s;./manage.py sync_static --gzip --expires --settings=envs.live" % env)
     deploy_code(target=target)
 
 
