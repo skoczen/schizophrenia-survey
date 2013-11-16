@@ -1,0 +1,10 @@
+{% extends "survey/base.html" %}{% load compress %}
+
+{% block content %}
+<div class="entrance">
+    <h1>Welcome.</h1>
+    
+    <p>Your survey ID is {{ survey_id }}.  Click below to complete the survey.</p>
+    <p><a href="{{ exit_url }}" class="btn btn-primary">Complete survey</a></p>
+</div>
+{% endblock %}
