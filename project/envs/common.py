@@ -29,6 +29,7 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+ALLOWED_HOSTS = ["qi-schizophrenia-staging.herokuapp.com", "qi-schizophrenia-live.herokuapp.com"]
 
 TIME_ZONE = 'America/Vancouver'
 
