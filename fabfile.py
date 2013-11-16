@@ -37,6 +37,5 @@ def deploy(target="staging"):
 def deploy_code(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
     run_ve("git push heroku master:master" % env)
-    run_ve("heroku run python manage.py syncdb --settings=envs.live %(app_string)s" % env)
-    run_ve("heroku run python manage.py migrate --settings=envs.live %(app_string)s" % env)
+    run_ve("heroku run python manage.py syncdb --migrate --settings=envs.live %(app_string)s" % env)
     run_ve("heroku restart %(app_string)s" % env)
