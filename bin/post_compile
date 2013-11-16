@@ -1,4 +1,5 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
+
 export MEMCACHE_SERVERS='' MEMCACHIER_SERVERS=''
 
 if [ -f bin/run_collectstatic ]; then
