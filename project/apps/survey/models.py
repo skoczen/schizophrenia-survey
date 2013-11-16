@@ -35,6 +35,9 @@ class SurveyResponse(models.Model):
     start_time = models.DateTimeField(auto_now_add=True)
     finish_time = models.DateTimeField(blank=True, null=True)
 
+    def __unicode__(self):
+        return "User %s" % self.entrance_id
+
 
 class HealthStateRating(models.Model):
     survey_response = models.ForeignKey(SurveyResponse)
