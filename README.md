@@ -57,6 +57,7 @@ heroku addons:add zerigo_dns:basic --app qi-schizophrenia-live
 heroku addons:add memcachier --app qi-schizophrenia-live
 heroku addons:add redistogo:nano --app qi-schizophrenia-live
 heroku addons:add heroku-postgresql
+heroku labs:enable user-env-compile 
 	```
 
 4. Set up your domains
