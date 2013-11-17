@@ -11,25 +11,35 @@ from django.contrib.auth.models import User
 @render_to("survey/entrance.html")
 def entrance(request):
     try:
-        survey_id = request.REQUEST["survey_id"]
-        exit_url = request.REQUEST["exit_url"]
+        survey_id = None
+        exit_url = None
+        if not request.user.is_authenticated():
+            survey_id = request.REQUEST["survey_id"]
+            exit_url = request.REQUEST["exit_url"]
 
-        if User.objects.filter(username=survey_id).count() > 0:
-            if not request.user.is_authenticated():
+            if User.objects.filter(username=survey_id).count() > 0:
                 user = authenticate(username=survey_id, password=survey_id)
                 login(request, user)
             else:
-                user = request.user
+                user = User.objects.create(username=survey_id)
+                user.set_password(survey_id)
+                user.save()
+                user = authenticate(username=survey_id, password=survey_id)
+                login(request, user)
         else:
-            user = User.objects.create(username=survey_id)
-            user.set_password(survey_id)
-            user.save()
-            user = authenticate(username=survey_id, password=survey_id)
-            login(request, user)
+            user = request.user
 
-        survey_response = SurveyResponse.objects.get_or_create(entrance_id=survey_id, user=user)[0]
-        survey_response.exit_url = exit_url
+        survey_response = SurveyResponse.objects.get_or_create(user=user)[0]
+        if survey_id:
+            survey_response.entrance_id = survey_id
+        if exit_url:
+            survey_response.exit_url = exit_url
         survey_response.save()
+
+        if survey_response.finished():
+            return HttpResponseRedirect(reverse("survey:complete"))
+        if survey_response.started():
+            return HttpResponseRedirect(reverse("survey:in_survey_stub"))
 
     except:
         import traceback; traceback.print_exc();
@@ -50,6 +60,8 @@ def next_page(request):
 def in_survey_stub(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_response.start_time = datetime.datetime.now()
+        survey_response.save()
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()

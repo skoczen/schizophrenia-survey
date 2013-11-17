@@ -32,7 +32,7 @@ class SurveyResponse(models.Model):
     user = models.ForeignKey('auth.User', editable=False)
     entrance_id = models.CharField(max_length=255)
     exit_url = models.TextField(max_length=255)
-    start_time = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
