@@ -29,7 +29,7 @@ class SurveyPath(models.Model):
 
 
 class SurveyResponse(models.Model):
-    user = models.ForeignKey('auth.User')
+    user = models.ForeignKey('auth.User', editable=False)
     entrance_id = models.CharField(max_length=255)
     exit_url = models.TextField(max_length=255)
     start_time = models.DateTimeField(auto_now_add=True)
