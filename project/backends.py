@@ -26,5 +26,6 @@ class CachedS3BotoStorage(S3BotoStorage):
 
             return u
         except:
+            print name
             import traceback; traceback.print_exc();
             return ""
