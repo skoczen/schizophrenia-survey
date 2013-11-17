@@ -102,8 +102,7 @@ INSTALLED_APPS = (
 
     "main_site",
     "survey",
-
-    
+   
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

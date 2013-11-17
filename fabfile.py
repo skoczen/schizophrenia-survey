@@ -23,5 +23,5 @@ def refreeze():
 def deploy(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
     local("git push heroku master:master" % env)
-    local("heroku run python manage.py syncdb --migrate --settings=envs.live %(app_string)s" % env)
+    local("heroku run python manage.py syncdb --migrate --all --settings=envs.live %(app_string)s" % env)
     local("heroku restart %(app_string)s" % env)
