@@ -20,6 +20,7 @@ def refreeze():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip install -r requirements.unstable.txt" % env)
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip freeze requirements.unstable.txt > requirements.txt" % env)
 
+
 def deploy(target="staging"):
     env.app_string = "--app %s" % env.SERVERS[target]
     local("git push heroku master:master" % env)

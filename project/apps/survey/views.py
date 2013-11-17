@@ -1,3 +1,5 @@
+import datetime
+
 from annoying.decorators import render_to
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -35,12 +37,30 @@ def entrance(request):
     return locals()
 
 def next_page(request):
+    try:
+        survey_response = SurveyResponse.objects.get(user=request.user)
+        if survey_response.finished():
+            return HttpResponseRedirect(reverse("survey:complete"))
+    except:
+        return HttpResponseRedirect(reverse("survey:unknown_code"))
     return HttpResponseRedirect(reverse("survey:in_survey_stub"))
+
 
 @render_to("survey/in_survey_stub.html")
 def in_survey_stub(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
+    except:
+        return HttpResponseRedirect(reverse("survey:unknown_code"))
+    return locals()
+
+
+@render_to("survey/complete.html")
+def complete(request):
+    try:
+        survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_response.finish_time = datetime.datetime.now()
+        survey_response.save()
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()

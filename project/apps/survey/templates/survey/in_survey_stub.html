@@ -4,7 +4,7 @@
 <div class="entrance">
     <h1>This is the survey.</h1>
     
-    <p>For now, this is it. You're done.</p>
-    <p><a href="{{ survey_response.exit_url }}" class="btn btn-primary">Exit survey</a></p>
+    <p>This is the middle of the survey.</p>
+    <p><a href="{% url "survey:next_page" %}" class="btn btn-primary">Continue</a></p>
 </div>
 {% endblock %}
