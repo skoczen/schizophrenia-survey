@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'', include('survey.urls', namespace="survey", app_name="survey")),
-    url(r'admin/', include(admin.site.urls), name="admin"),
+    url(r'administration/', include(admin.site.urls), name="admin"),
 
 
     url(r'^fonts/(?P<path>.*)$', 'django.views.static.serve', {
