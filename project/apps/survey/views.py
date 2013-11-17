@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from .models import SurveyResponse
 from django.contrib.auth.models import User
 
+
 @render_to("survey/entrance.html")
 def entrance(request):
     try:
@@ -45,6 +46,7 @@ def entrance(request):
         import traceback; traceback.print_exc();
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()
+
 
 def next_page(request):
     try:
