@@ -1,7 +1,6 @@
 This is the repository for the Schizophrenia Survey contract work between Steven Skoczen and Informatics Experts.
 
-![Build status](https://circleci.com/gh/:skoczen/:schizophrenia-survey.png?circle-token=:circle-token)
-
+![Build status](https://circleci.com/gh/skoczen/schizophrenia-survey.png?circle-token=:circle-token)
 
 Information on how to bootstrap and deploy the project below.
 
