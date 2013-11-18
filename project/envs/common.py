@@ -21,12 +21,12 @@ SERVER_EMAIL = 'skoczen@gmail.com'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'project.sqlite3',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': DB_PASSWORD,                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'project.sqlite3',
+        'USER': '',
+        'PASSWORD': DB_PASSWORD,
+        'HOST': '',
+        'PORT': '',
     }
 }
 ALLOWED_HOSTS = ["qi-schizophrenia-staging.herokuapp.com", "qi-schizophrenia-live.herokuapp.com"]
@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'project.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     join(abspath(PROJECT_ROOT),"templates"),
@@ -97,12 +97,16 @@ INSTALLED_APPS = (
     "annoying",
     "compressor",
     "django_extensions",
+    
     "gunicorn",
     "south",
 
     "main_site",
     "survey",
-   
+
+
+    # Must come after south
+    "django_nose",
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -129,6 +133,7 @@ LOGGING = {
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
@@ -138,5 +143,13 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-    }
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
 }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = False

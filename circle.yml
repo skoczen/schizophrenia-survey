@@ -1,0 +1,15 @@
+machine:
+  environment:
+    DATABASE_URL: env.DEV_DB_URL = "postgres://ubuntu:@localhost:5432/schizophrenia"
+
+  python:
+    version:
+      2.7.3
+
+dependencies:
+  override:
+    - pip install -r requirements.txt
+    
+test:
+  override:
+    - ./manage.py test

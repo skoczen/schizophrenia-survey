@@ -7,6 +7,7 @@ django_compressor
 django-heroku-memcacheify
 django-heroku-postgresify
 django-extensions
+django-nose
 django-selector
 django-staticfiles
 django-storages
