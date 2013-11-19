@@ -17,5 +17,5 @@ test:
 deployment:
   staging:
     branch: master
-    heroku:
-      appname: qi-schizophrenia-staging
+    commands:
+      - git push git@heroku.com:qi-schizophrenia-survey.git $CIRCLE_SHA1:master
