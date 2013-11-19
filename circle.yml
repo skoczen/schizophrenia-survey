@@ -13,3 +13,9 @@ dependencies:
 test:
   override:
     - ./manage.py test
+
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: qi-schizophrenia-staging
