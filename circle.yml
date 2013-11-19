@@ -19,3 +19,7 @@ deployment:
     branch: master
     commands:
       - git push git@heroku.com:qi-schizophrenia-staging.git $CIRCLE_SHA1:master
+  live:
+    branch: live
+    commands:
+      - git push git@heroku.com:qi-schizophrenia-live.git $CIRCLE_SHA1:live
