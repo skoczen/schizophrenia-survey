@@ -2,11 +2,12 @@ from django.db import models
 
 
 class HealthStateSequenceUpload(models.Model):
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True, blank=True)
     csv_file = models.FileField(upload_to="sequences")
 
 
 class HealthState(models.Model):
+    number = models.IntegerField()
     name = models.CharField(max_length=255)
     actor_is_male = models.BooleanField(default=False)
     is_a_side_effect = models.BooleanField(default=False)
@@ -21,17 +22,24 @@ class HealthState(models.Model):
     tto_body = models.TextField(max_length=255, blank=True, null=True)
     outro_body = models.TextField(max_length=255, blank=True, null=True)
 
+    def __unicode__(self):
+        return "Health State #%s" % self.number
+
 
 class SurveyPath(models.Model):
-    state_1 = models.ForeignKey(HealthState, related_name='+')
-    state_2 = models.ForeignKey(HealthState, related_name='+')
-    state_3 = models.ForeignKey(HealthState, related_name='+')
-    state_4 = models.ForeignKey(HealthState, related_name='+')
-    state_5 = models.ForeignKey(HealthState, related_name='+')
-    state_6 = models.ForeignKey(HealthState, related_name='+')
-    state_7 = models.ForeignKey(HealthState, related_name='+')
-    state_8 = models.ForeignKey(HealthState, related_name='+')
+    order = models.IntegerField()
+    used = models.BooleanField(default=False)
+    state_1 = models.IntegerField()
+    state_2 = models.IntegerField()
+    state_3 = models.IntegerField()
+    state_4 = models.IntegerField()
+    state_5 = models.IntegerField()
+    state_6 = models.IntegerField()
+    state_7 = models.IntegerField()
+    state_8 = models.IntegerField()
 
+    class Meta:
+        ordering = ("order",)
 
 class SurveyResponse(models.Model):
     user = models.ForeignKey('auth.User', editable=False)
@@ -39,6 +47,15 @@ class SurveyResponse(models.Model):
     exit_url = models.TextField(max_length=255)
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
+
+    state_1 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_2 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_3 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_4 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_5 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_6 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_7 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_8 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
 
     def __unicode__(self):
         return "User %s" % self.entrance_id

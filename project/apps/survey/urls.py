@@ -9,5 +9,5 @@ urlpatterns = patterns('',
     url(r'^complete$', views.complete, name='complete'),
     url(r'^Unknown-Code$', views.unknown_code, name='unknown_code'),
 
-    url(r'^administration/upload-sequence[/]?$', views.upload_sequence, name='upload_sequence'),
+    url(r'^administration/upload-sequence/?$', views.upload_sequence, name='upload_sequence'),
 )

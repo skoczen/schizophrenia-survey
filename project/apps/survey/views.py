@@ -1,11 +1,14 @@
 import datetime
 
 from annoying.decorators import render_to
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
 
+from .forms import HealthStateSequenceUploadForm
 from .models import SurveyResponse
+from .tasks import update_health_sequences
 from django.contrib.auth.models import User
 
 
@@ -85,6 +88,15 @@ def unknown_code(request):
     return locals()
 
 
+@user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 0)
 @render_to("survey/administration/upload_sequence.html")
 def upload_sequence(request):
+    if request.method == "POST":
+        form = HealthStateSequenceUploadForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            upload = form.save()
+            update_health_sequences(upload.pk)
+    else:
+        form = HealthStateSequenceUploadForm()
     return locals()

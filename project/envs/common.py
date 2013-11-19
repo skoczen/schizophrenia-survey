@@ -21,8 +21,8 @@ SERVER_EMAIL = 'skoczen@gmail.com'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'project.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'schizophrenia',
         'USER': '',
         'PASSWORD': DB_PASSWORD,
         'HOST': '',
@@ -41,7 +41,7 @@ USE_I18N = False
 USE_L10N = True
 
 MEDIA_ROOT = join(PROJECT_ROOT, "media_root")
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = join(PROJECT_ROOT, "collected_static")
 STATIC_URL = '/static/'

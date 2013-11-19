@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import HealthState, SurveyPath, SurveyResponse, HealthStateRating
+from models import HealthState, SurveyPath, SurveyResponse, HealthStateRating, HealthStateSequenceUpload
 
 class SurveyResponseOptions(admin.ModelAdmin):
     list_display = ('entrance_id',
@@ -16,7 +16,26 @@ class SurveyResponseOptions(admin.ModelAdmin):
                     'finished', )
     search_fields = ('entrance_id', 'user__email')
 
+
+class SurveyPathOptions(admin.ModelAdmin):
+    list_display = ('order',
+                    'used',
+                    'state_1',
+                    'state_2',
+                    'state_3',
+                    'state_4',
+                    'state_5',
+                    'state_6',
+                    'state_7',
+                    'state_8',
+                    )
+
+
+class HealthStateSequenceUploadOptions(admin.ModelAdmin):
+    list_display = ('csv_file', 'uploaded_at',)
+
+admin.site.register(HealthStateSequenceUpload, HealthStateSequenceUploadOptions)
 admin.site.register(HealthState)
-admin.site.register(SurveyPath)
+admin.site.register(SurveyPath, SurveyPathOptions)
 admin.site.register(SurveyResponse, SurveyResponseOptions)
 # admin.site.register(HealthStateRating)

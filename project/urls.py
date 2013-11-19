@@ -13,4 +13,8 @@ urlpatterns = patterns('',
     url(r'^fonts/(?P<path>.*)$', 'django.views.static.serve', {
             'document_root': "%s/main_site/fonts" % settings.STATIC_ROOT,
     }),
+
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+    }),
 )

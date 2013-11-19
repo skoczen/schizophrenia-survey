@@ -20,6 +20,9 @@ Boostrapping
 	
 	```bash
 	fab initial_setup
+    # Because of a weird south/permissions bug.
+    ./manage.py migrate survey 0002
+    ./manage.py migrate
 	```
 
 4. You're set. 
