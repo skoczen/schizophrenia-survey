@@ -23,7 +23,7 @@ deployment:
       - git push git@heroku.com:qi-schizophrenia-staging.git $CIRCLE_SHA1:master
       - heroku run python manage.py syncdb --migrate --all --settings=envs.live --app qi-schizophrenia-staging
       - heroku restart --app qi-schizophrenia-staging
-      - heroku maintenance:iff --app qi-schizophrenia-staging
+      - heroku maintenance:off --app qi-schizophrenia-staging
   live:
     branch: live
     commands:
@@ -32,4 +32,4 @@ deployment:
       - git push git@heroku.com:qi-schizophrenia-live.git $CIRCLE_SHA1:master
       - heroku run python manage.py syncdb --migrate --all --settings=envs.live --app qi-schizophrenia-live
       - heroku restart --app qi-schizophrenia-live
-      - heroku maintenance:iff --app qi-schizophrenia-live
+      - heroku maintenance:off --app qi-schizophrenia-live
