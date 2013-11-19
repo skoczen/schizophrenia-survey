@@ -1,6 +1,11 @@
 from django.db import models
 
 
+class HealthStateSequenceUpload(models.Model):
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    csv_file = models.FileField(upload_to="sequences")
+
+
 class HealthState(models.Model):
     name = models.CharField(max_length=255)
     actor_is_male = models.BooleanField(default=False)

@@ -83,3 +83,8 @@ def complete(request):
 @render_to("survey/unknown_code.html")
 def unknown_code(request):
     return locals()
+
+
+@render_to("survey/administration/upload_sequence.html")
+def upload_sequence(request):
+    return locals()
