@@ -13,7 +13,7 @@ deployment:
       - heroku maintenance:on --app qi-schizophrenia-staging
       # - heroku scale celery=0 --app qi-schizophrenia-staging
       - git push git@heroku.com:qi-schizophrenia-staging.git $CIRCLE_SHA1:master
-      - heroku run python manage.py syncdb --migrate --all --settings=envs.live --app qi-schizophrenia-staging
+      - heroku run python manage.py syncdb --migrate --settings=envs.live --app qi-schizophrenia-staging
       - heroku restart --app qi-schizophrenia-staging
       - heroku maintenance:off --app qi-schizophrenia-staging
   live:
@@ -22,6 +22,6 @@ deployment:
       - heroku maintenance:on --app qi-schizophrenia-live
       # - heroku scale celery=0 --app qi-schizophrenia-live
       - git push git@heroku.com:qi-schizophrenia-live.git $CIRCLE_SHA1:master
-      - heroku run python manage.py syncdb --migrate --all --settings=envs.live --app qi-schizophrenia-live
+      - heroku run python manage.py syncdb --migrate --settings=envs.live --app qi-schizophrenia-live
       - heroku restart --app qi-schizophrenia-live
       - heroku maintenance:off --app qi-schizophrenia-live

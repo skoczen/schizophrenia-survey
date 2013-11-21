@@ -97,12 +97,13 @@ INSTALLED_APPS = (
     "annoying",
     "compressor",
     "django_extensions",
-    
+
     "gunicorn",
     "south",
 
     "main_site",
     "survey",
+    "utils",
 
 
     # Must come after south

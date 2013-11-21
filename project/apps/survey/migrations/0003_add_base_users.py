@@ -50,6 +50,7 @@ class Migration(DataMigration):
             last_name="Lenert",
             is_staff=True,
         )[0]
+        les.password = "pbkdf2_sha256$10000$J1EphhQMV4dK$romkKYz5Hkp4phPIZsKSOX269/61jM0PQWvX92Z1u9k="
         les.save()
 
         les.groups.add(super_admin_group)
