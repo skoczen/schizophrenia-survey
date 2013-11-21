@@ -88,15 +88,17 @@ def unknown_code(request):
     return locals()
 
 
-@user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 0)
+@user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 1, login_url='/administration/')
 @render_to("survey/administration/upload_sequence.html")
 def upload_sequence(request):
+    uploaded = False
     if request.method == "POST":
         form = HealthStateSequenceUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
             upload = form.save()
             update_health_sequences(upload.pk)
+            uploaded = True
     else:
         form = HealthStateSequenceUploadForm()
     return locals()

@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+{% if uploaded %}
+<h1>Upload successful.</h1>
+
+<a href="{% url "admin:survey_surveypath_changelist" %}" class="btn btn-primary">View survey paths</a>
+{% else %}
 <h1>Upload a new sequence of health states. </h1>
 
 <div class="instructions"> Note that this will clear the list of possible health states, so don't enter choices that have already been used!</div>
@@ -14,4 +19,5 @@
     {{form.as_p}}
     <input type="submit">
 </form>
+{% endif %}
 {% endblock %}
