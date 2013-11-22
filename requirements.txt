@@ -25,6 +25,8 @@ paramiko==1.12.0
 psycopg2==2.5.1
 pycrypto==2.6.1
 pylibmc==1.2.3
+selenium==2.37.2
 six==1.4.1
+splinter==0.5.4
 versiontools==1.9.1
 wsgiref==0.1.2

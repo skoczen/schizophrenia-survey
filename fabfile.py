@@ -26,3 +26,12 @@ def deploy(target="staging"):
     local("git push heroku master:master" % env)
     local("heroku run python manage.py syncdb --migrate --settings=envs.live %(app_string)s" % env)
     local("heroku restart %(app_string)s" % env)
+
+def unit():
+    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=\!e2e" % env)
+
+def e2e():
+    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=\!e2e" % env)
+
+def wip():
+    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=wip" % env)

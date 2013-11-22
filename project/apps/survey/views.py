@@ -46,7 +46,6 @@ def entrance(request):
             return HttpResponseRedirect(reverse("survey:in_survey_stub"))
 
     except:
-        import traceback; traceback.print_exc();
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()
 

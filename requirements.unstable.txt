@@ -17,4 +17,5 @@ gunicorn
 lxml
 psycopg2
 south
+splinter
 versiontools

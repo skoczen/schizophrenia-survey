@@ -7,3 +7,7 @@ collected_static
 keys_and_passwords_private.py
 
 project/media_root/*
+
+chromedriver.log
+
+ghostdriver.log
