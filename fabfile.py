@@ -16,9 +16,14 @@ env.SERVERS = {
 }
 
 
+def local_venv(cmd):
+    env.cmd = cmd
+    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; %(cmd)s" % env)
+
+
 def refreeze():
-    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip install -r requirements.unstable.txt" % env)
-    local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; pip freeze requirements.unstable.txt > requirements.txt" % env)
+    local_venv("pip install -r requirements.unstable.txt")
+    local_venv("pip freeze requirements.unstable.txt > requirements.txt")
 
 
 def deploy(target="staging"):
@@ -27,11 +32,22 @@ def deploy(target="staging"):
     local("heroku run python manage.py syncdb --migrate --settings=envs.live %(app_string)s" % env)
     local("heroku restart %(app_string)s" % env)
 
+
 def unit():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=\!e2e" % env)
+
 
 def e2e():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=\!e2e" % env)
 
+
 def wip():
     local("source ~/.virtualenvs/%(VIRTUALENV_NAME)s/bin/activate; manage.py test --attr=wip" % env)
+
+
+def setup_db():
+    local_venv("dropdb schizophrenia --if-exists")
+    local_venv("createdb schizophrenia")
+    local_venv("./manage.py syncdb")
+    local_venv("./manage.py loaddata permissions.json")
+    local_venv("./manage.py migrate")

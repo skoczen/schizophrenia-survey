@@ -19,10 +19,7 @@ Boostrapping
 3. Set up your remotes manually, or by use the fab helper command.
 	
 	```bash
-	fab initial_setup
-    # Because of a weird south/permissions bug.
-    ./manage.py migrate survey 0002
-    ./manage.py migrate
+    fab setup_db
 	```
 
 4. You're set. 

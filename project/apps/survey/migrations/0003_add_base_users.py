@@ -7,7 +7,6 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
         super_admin_group = orm['auth.group'].objects.get_or_create(name="Survey Super-Admins")[0]
 
         # Survey Super-admins.
