@@ -7,7 +7,7 @@ class HealthStateSequenceUpload(models.Model):
 
 
 class HealthState(models.Model):
-    number = models.IntegerField()
+    number = models.IntegerField(unique=True)
     name = models.CharField(max_length=255)
     actor_is_male = models.BooleanField(default=False)
     is_a_side_effect = models.BooleanField(default=False)

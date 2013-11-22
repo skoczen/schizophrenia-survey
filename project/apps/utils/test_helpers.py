@@ -22,5 +22,7 @@ class E2ETestCase(LiveServerTestCase):
             pass
         self.browser.visit("%s%s" % (self.live_server_url, url))
 
+    def ele(self, css_selector):
+        return self.browser.find_by_css(css_selector)
 
 wip = attr("wip")

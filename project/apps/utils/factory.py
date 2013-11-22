@@ -4,6 +4,9 @@ import base64
 from decimal import getcontext, Decimal
 getcontext().prec = 7
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
+from survey.models import HealthState, SurveyPath, SurveyResponse, HealthStateRating
+
+MINIMUM_NUM_HEALTH_STATES = 32
 
 
 class DjangoFunctionalFactory:
@@ -320,4 +323,44 @@ RANDOM_EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "hotmail.com", "live.com",
 
 
 class Factory(DjangoFunctionalFactory):
-    pass
+
+    def health_state(cls, *args, **kwargs):
+        options = {
+            "number": cls.rand_int(),
+            "name": cls.rand_str(),
+            "actor_is_male": cls.rand_bool(),
+            "is_a_side_effect": cls.rand_bool(),
+            "is_transitional": cls.rand_bool(),
+            "severity_rating": cls.rand_int(),
+            "video_url": cls.rand_domain(),
+            "title": cls.rand_str(),
+            "intro_body": cls.rand_str(),
+            "vas_body": cls.rand_str(),
+            "tto_body": cls.rand_str(),
+            "outro_body": cls.rand_str(),
+        }
+        options.update(kwargs)
+
+        return HealthState.objects.create(**options)
+
+    @classmethod
+    def survey_path(cls, **kwargs):
+        if not HealthState.objects.count() >= MINIMUM_NUM_HEALTH_STATES:
+            for i in range(0, MINIMUM_NUM_HEALTH_STATES):
+                cls.health_state(number=i)
+
+        all_numbers = HealthState.objects.all().values("number")
+        print all_numbers
+
+        options = {
+            "order": cls.randint(),
+            "state_1": all_numbers[1],
+            "state_2": all_numbers[2],
+            "state_3": all_numbers[3],
+            "state_4": all_numbers[4],
+            "state_5": all_numbers[5],
+            "state_6": all_numbers[6],
+            "state_7": all_numbers[7],
+            "state_8": all_numbers[8],
+        }
+        return SurveyPath.objects.create(**options)
