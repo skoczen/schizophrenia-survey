@@ -1,7 +1,7 @@
 from utils.test_helpers import E2ETestCase, wip
 from django.core.urlresolvers import reverse
 
-@wip
+
 class HomePageTest(E2ETestCase):
 
     def test_home_page_gives_invalid_code_with_no_code(self):
