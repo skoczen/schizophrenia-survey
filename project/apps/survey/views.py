@@ -33,7 +33,10 @@ def entrance(request):
         else:
             user = request.user
 
-        survey_response = SurveyResponse.objects.get_or_create(user=user)[0]
+        survey_response, created = SurveyResponse.objects.get_or_create(user=user)
+        if created:
+            survey_response.start_time = datetime.datetime.now()
+            survey_response.save()
         if survey_id:
             survey_response.entrance_id = survey_id
         if exit_url:
@@ -43,7 +46,7 @@ def entrance(request):
         if survey_response.finished():
             return HttpResponseRedirect(reverse("survey:complete"))
         if survey_response.started():
-            return HttpResponseRedirect(reverse("survey:in_survey_stub"))
+            return HttpResponseRedirect(reverse("survey:in_survey"))
 
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
@@ -57,15 +60,15 @@ def next_page(request):
             return HttpResponseRedirect(reverse("survey:complete"))
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
-    return HttpResponseRedirect(reverse("survey:in_survey_stub"))
+    return HttpResponseRedirect(reverse("survey:in_survey"))
 
 
-@render_to("survey/in_survey_stub.html")
-def in_survey_stub(request):
+@render_to("survey/in_survey.html")
+def in_survey(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
-        survey_response.start_time = datetime.datetime.now()
-        survey_response.save()
+        context = locals()
+        context.update(survey_response.current_page_context)
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()

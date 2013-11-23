@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.cache import cache
+
+NEXT_SURVEY_PATH_KEY = "qi-next-survey-path-id"
 
 
 class HealthStateSequenceUpload(models.Model):
@@ -27,7 +30,7 @@ class HealthState(models.Model):
 
 
 class SurveyPath(models.Model):
-    order = models.IntegerField()
+    order = models.IntegerField(unique=True)
     used = models.BooleanField(default=False)
     state_1 = models.IntegerField()
     state_2 = models.IntegerField()
@@ -41,12 +44,39 @@ class SurveyPath(models.Model):
     class Meta:
         ordering = ("order",)
 
+    @classmethod
+    def get_next_path(cls):
+        try:
+            next_order = cache.incr(NEXT_SURVEY_PATH_KEY)
+            next_path = cls.objects.get(order=next_order)
+            next_path.save()
+        except ValueError:
+            # Cache key not set yet.
+            if cls.objects.filter(used=False).count() > 0:
+                next_path = cls.objects.filter(used=False).order_by("order")[0]
+                next_order = next_path.order
+                next_path.used = True
+                next_path.save()
+                cache.set(NEXT_SURVEY_PATH_KEY, next_order)
+
+            else:
+                from django.core.mail import mail_admins
+                from traceback import format_exc
+                mail_admins("CRITICAL: We're out of survey paths!",
+                            "Survey.get_next_path() was just called, but there are no unused survey paths. \%s " % format_exc()
+                            )
+                return None
+
+        return SurveyPath.objects.get(order=next_order)
+
+
 class SurveyResponse(models.Model):
     user = models.ForeignKey('auth.User', editable=False)
     entrance_id = models.CharField(max_length=255)
     exit_url = models.TextField(max_length=255)
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
+    survey_path_id = models.IntegerField(blank=True)  # For auditing
 
     state_1 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
     state_2 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
@@ -60,9 +90,23 @@ class SurveyResponse(models.Model):
     def __unicode__(self):
         return "User %s" % self.entrance_id
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            path = SurveyPath.get_next_path()
+            self.survey_path = path.pk
+            for i in range(1, 8):
+                hs = HealthState.objects.get(number=getattr(path, "state_%s" % i))
+                setattr(self, "state_%s" % i, hs)
+
+        super(SurveyResponse, self).save(*args, **kwargs)
+
     @property
     def ratings(self):
         return self.healthstaterating_set.all()
+
+    @property
+    def current_page_context(self):
+        return {}
 
     def _completed_state(self, order):
         try:

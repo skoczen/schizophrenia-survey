@@ -2,7 +2,7 @@ from utils.test_helpers import E2ETestCase, wip
 from django.core.urlresolvers import reverse
 from utils.factory import Factory
 
-@wip
+
 class HomePageTest(E2ETestCase):
 
     def setUp(self, *args, **kwargs):

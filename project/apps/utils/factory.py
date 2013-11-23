@@ -4,6 +4,8 @@ import base64
 from decimal import getcontext, Decimal
 getcontext().prec = 7
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
+from django.contrib.auth.models import User
+
 from survey.models import HealthState, SurveyPath, SurveyResponse, HealthStateRating
 
 MINIMUM_NUM_HEALTH_STATES = 32
@@ -52,11 +54,15 @@ class DjangoFunctionalFactory:
 
     @classmethod
     def rand_domain(cls):
-        return RANDOM_EMAIL_DOMAINS[cls.rand_int(0,len(RANDOM_EMAIL_DOMAINS)-1)]
-    
+        return RANDOM_EMAIL_DOMAINS[cls.rand_int(0, len(RANDOM_EMAIL_DOMAINS)-1)]
+
+    @classmethod
+    def rand_email(cls):
+        return "%s@%s" % (cls.rand_name(), cls.rand_domain())
+
     @classmethod
     def rand_us_state(cls):
-        return STATE_CHOICES[cls.rand_int(0,len(STATE_CHOICES)-1)][0]
+        return STATE_CHOICES[cls.rand_int(0, len(STATE_CHOICES)-1)][0]
 
     @classmethod
     def valid_test_cc_number(cls):
@@ -292,38 +298,54 @@ RANDOM_NAME_SOURCE = ["Atricia", "Linda", "Barbara", "Elizabeth", "Jennifer",
 "Michal", "Lynwood", "Lindsay", "Jewel", "Jere", "Hai", "Elden", "Dorsey",
 "Darell", "Broderick", "Alonso"]
 
-RANDOM_PLANT_NAME_SOURCE = ["Abelia","Acacia","Acer","Acevedo","Afra","Akina",
-"Alaleh","Alani","Alder","Almond","Althea ","Alyssum","Amaranta","Amaryllis",
-"Anita","Apricot","Arousa","Arusa","Ash","Aspen ","Aster","Astera","Avishan",
-"Ayame","Ayla","Azalea","Azargol","Azargoon","Azarin","Azhand","Babuk",
-"Bahar","Baharak","Banafsheh","Barnacle","Basil","Bay","Beech","Begonia",
-"Belladonna","Birch","Blackberry","Blossom","Bluebell ","Booker","Botan",
-"Bramble","Bryony","Bud","Burke ","Buttercup","Cactus","Caltha","Camelai",
-"Camellia","Carnation","Cedar","Cherise","Cherry","Cinnamon","Cliantha",
-"Clover","Cosmos","Cyclamen","Cypress","Daffodil","Dahlia","Daisy","Dandelion",
-"Daphne","Dianthe","Dianthus","Enola ","Eranthe","Fern","Fiorenza","Fleur",
-"Fern","Fiorenza","Fleur","Flora","Freesia","Fuchsia","Gardenia","Garland",
-"Gazania","Geranium","Ginger","Gooseberry","Gul","Hawthorne","Hazel","Holly",
-"Hollyhock","Honeysuckle","Hyacinth","Iris ","Ivy","Jacaranda","Jasmine",
-"Jessamine","Juniper","Kalei","Lantana","Laurel","Leilani","Licorice ",
-"Lilac","Lily ","Lobelia","Lotus","Magnolia","Mallow ","Mandrake","Maple",
-"Marguerite","Marigold","Mayflower","Miki","Mimosa","Mulberry","Myrtle ",
-"Nihal","Olive","Pansy ","Patience","Peach","Peony","Peppermint","Periwinkle",
-"Persimmon","Petunia","Pimpernel","Poppy","Posey","Primrose","Pumpkin",
-"Quince","Rose","Rosemary","Saffron","Sage","Shamrock","Snapdragon",
-"Snowdrop","Sorrel","Sunflower","Sweet Pea","Tansy ","Thistle","Tiger-lily",
-"Truffle","Tulip","Verbena ","Violet","Willow","Yasaman","Yasmin","Yasminah",
-"Yew","Zara"]
+RANDOM_PLANT_NAME_SOURCE = ["Abelia", "Acacia", "Acer", "Acevedo", "Afra", "Akina",
+"Alaleh", "Alani", "Alder", "Almond", "Althea ", "Alyssum", "Amaranta", "Amaryllis",
+"Anita", "Apricot", "Arousa", "Arusa", "Ash", "Aspen ", "Aster", "Astera", "Avishan",
+"Ayame", "Ayla", "Azalea", "Azargol", "Azargoon", "Azarin", "Azhand", "Babuk",
+"Bahar", "Baharak", "Banafsheh", "Barnacle", "Basil", "Bay", "Beech", "Begonia",
+"Belladonna", "Birch", "Blackberry", "Blossom", "Bluebell ", "Booker", "Botan",
+"Bramble", "Bryony", "Bud", "Burke ", "Buttercup", "Cactus", "Caltha", "Camelai",
+"Camellia", "Carnation", "Cedar", "Cherise", "Cherry", "Cinnamon", "Cliantha",
+"Clover", "Cosmos", "Cyclamen", "Cypress", "Daffodil", "Dahlia", "Daisy", "Dandelion",
+"Daphne", "Dianthe", "Dianthus", "Enola ", "Eranthe", "Fern", "Fiorenza", "Fleur",
+"Fern", "Fiorenza", "Fleur", "Flora", "Freesia", "Fuchsia", "Gardenia", "Garland",
+"Gazania", "Geranium", "Ginger", "Gooseberry", "Gul", "Hawthorne", "Hazel", "Holly",
+"Hollyhock", "Honeysuckle", "Hyacinth", "Iris ", "Ivy", "Jacaranda", "Jasmine",
+"Jessamine", "Juniper", "Kalei", "Lantana", "Laurel", "Leilani", "Licorice ",
+"Lilac", "Lily ", "Lobelia", "Lotus", "Magnolia", "Mallow ", "Mandrake", "Maple",
+"Marguerite", "Marigold", "Mayflower", "Miki", "Mimosa", "Mulberry", "Myrtle ",
+"Nihal", "Olive", "Pansy ", "Patience", "Peach", "Peony", "Peppermint", "Periwinkle",
+"Persimmon", "Petunia", "Pimpernel", "Poppy", "Posey", "Primrose", "Pumpkin",
+"Quince", "Rose", "Rosemary", "Saffron", "Sage", "Shamrock", "Snapdragon",
+"Snowdrop", "Sorrel", "Sunflower", "Sweet Pea", "Tansy ", "Thistle", "Tiger-lily",
+"Truffle", "Tulip", "Verbena ", "Violet", "Willow", "Yasaman", "Yasmin", "Yasminah",
+"Yew", "Zara"]
 
 RANDOM_STREET_SUFFIX_SOURCE = ["St.", "Ave.", "Blvd.", "Ln.", "Ct.", "Pl.", "Way"]
 
-RANDOM_EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "hotmail.com", "live.com", 
-                        "comcast.net", "qwest.com","example.com","example.net",
+RANDOM_EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "hotmail.com", "live.com",
+                        "comcast.net", "qwest.com", "example.com", "example.net",
                         "example.org"]
 
 
 class Factory(DjangoFunctionalFactory):
 
+    @classmethod
+    def user(cls, *args, **kwargs):
+        password = kwargs.get("password", cls.rand_str())
+        options = {
+            "username": cls.rand_str(),
+            "email": cls.rand_email(),
+            "first_name": cls.rand_name(),
+            "last_name": cls.rand_name(),
+        }
+        options.update(kwargs)
+
+        u = User.objects.create(**options)
+        u.set_password(password)
+        return u, password
+
+    @classmethod
     def health_state(cls, *args, **kwargs):
         options = {
             "number": cls.rand_int(),
@@ -345,15 +367,14 @@ class Factory(DjangoFunctionalFactory):
 
     @classmethod
     def survey_path(cls, **kwargs):
-        if not HealthState.objects.count() >= MINIMUM_NUM_HEALTH_STATES:
+        if HealthState.objects.count() < MINIMUM_NUM_HEALTH_STATES:
             for i in range(0, MINIMUM_NUM_HEALTH_STATES):
                 cls.health_state(number=i)
 
-        all_numbers = HealthState.objects.all().values("number")
-        print all_numbers
+        all_numbers = HealthState.objects.all().values_list("number", flat=True)
 
         options = {
-            "order": cls.randint(),
+            "order": cls.rand_int(),
             "state_1": all_numbers[1],
             "state_2": all_numbers[2],
             "state_3": all_numbers[3],
@@ -364,3 +385,20 @@ class Factory(DjangoFunctionalFactory):
             "state_8": all_numbers[8],
         }
         return SurveyPath.objects.create(**options)
+
+    @classmethod
+    def survey_response(cls, **kwargs):
+        cls.survey_path()
+
+        user = None
+        if not "user" in kwargs:
+            user = cls.user()
+
+        options = {
+            "user": user,
+            "entrance_id": cls.rand_str(),
+            "exit_url": cls.rand_domain(),
+            "start_time": datetime.datetime.now(),
+        }
+        options.update(**kwargs)
+        return SurveyResponse.objects.create(**options)

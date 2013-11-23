@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
 
 from nose.plugins.attrib import attr
+from nose.plugins.skip import SkipTest
 from splinter.browser import Browser
 
 
@@ -24,5 +25,12 @@ class E2ETestCase(LiveServerTestCase):
 
     def ele(self, css_selector):
         return self.browser.find_by_css(css_selector)
+
+def skip(func):
+    def _():
+        raise SkipTest("Test %s is skipped" % func.__name__)
+    _.__name__ = func.__name__
+    return _
+
 
 wip = attr("wip")

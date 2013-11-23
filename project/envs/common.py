@@ -1,7 +1,6 @@
 from os.path import abspath, join, dirname
 from sys import path
 from envs.keys_and_passwords import *
-from memcacheify import memcacheify
 
 PROJECT_ROOT = abspath(join(dirname(__file__), "../"))
 APPS_DIR = abspath(join(dirname(__file__), "../", "apps"))
@@ -17,6 +16,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+EMAIL_SUBJECT_PREFIX = "[Schizophrenia Survey] "
 SERVER_EMAIL = 'skoczen@gmail.com'
 
 DATABASES = {
