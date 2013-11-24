@@ -1,11 +1,11 @@
-from django.test import TransactionTestCase
 from utils.factory import Factory
-from utils.test_helpers import skip
+from utils.test_helpers import skip, wip, ClearedTransactionTestCase
 
 
-class SurveyPathTest(TransactionTestCase):
+class SurveyPathTest(ClearedTransactionTestCase):
 
     def setUp(self):
+        super(SurveyPathTest, self).setUp()
         self.survey_response = Factory.survey_response()
 
     @skip

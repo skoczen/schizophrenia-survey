@@ -1,11 +1,11 @@
-from django.test import TransactionTestCase
-from utils.test_helpers import E2ETestCase, wip, skip
+from utils.test_helpers import skip, wip, ClearedTransactionTestCase
 from utils.factory import Factory
 
 
-class CurrentPageContextTest(TransactionTestCase):
+class CurrentPageContextTest(ClearedTransactionTestCase):
 
     def setUp(self):
+        super(CurrentPageContextTest, self).setUp()
         self.survey_response = Factory.survey_response()
 
     def test_context_returns_a_dict(self):

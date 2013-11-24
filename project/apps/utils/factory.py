@@ -374,10 +374,9 @@ class Factory(DjangoFunctionalFactory):
         all_numbers = list(HealthState.objects.all().values_list("number", flat=True))
         random.shuffle(all_numbers)
 
-        order = 0
-        if "order" not in kwargs:
-            while SurveyPath.objects.filter(order=order).count() > 0:
-                order = cls.rand_int(0, 9999999)
+        order = 1
+        if "order" not in kwargs and SurveyPath.objects.all().count() > 0:
+            order = SurveyPath.objects.order_by("-order")[0].order + 1
 
         options = {
             "order": order,
