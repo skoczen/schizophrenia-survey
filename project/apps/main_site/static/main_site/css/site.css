@@ -12,3 +12,8 @@
 .entrance h1 {
     padding: 20px 0;
 }
+.reset_survey {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
