@@ -1,4 +1,4 @@
-from utils.test_helpers import E2ETestCase, wip
+from utils.test_helpers import E2ETestCase, wip, skip
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from utils.factory import Factory

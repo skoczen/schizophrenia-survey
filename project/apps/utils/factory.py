@@ -399,7 +399,7 @@ class Factory(DjangoFunctionalFactory):
 
         user = None
         if not "user" in kwargs:
-            user = cls.user()
+            user, password = cls.user()
 
         options = {
             "user": user,

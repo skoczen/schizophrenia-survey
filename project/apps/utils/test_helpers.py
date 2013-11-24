@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
+from django.conf import settings
 
 from nose.plugins.attrib import attr
 from nose.plugins.skip import SkipTest
@@ -10,7 +11,7 @@ from splinter.browser import Browser
 class E2ETestCase(LiveServerTestCase):
     def setUp(self, *args, **kwargs):
         super(E2ETestCase, self).setUp(*args, **kwargs)
-        self.browser = Browser('chrome')
+        self.browser = Browser(settings.BROWSER)
 
     def tearDown(self, *args, **kwargs):
         self.browser.quit()

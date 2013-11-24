@@ -160,4 +160,5 @@ LOGGING = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+BROWSER = "phantomjs"
 SOUTH_TESTS_MIGRATE = False
