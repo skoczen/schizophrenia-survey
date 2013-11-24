@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="entrance">
-    <h1>Health State {{ health_state.number }}</h1>
+    <h1>Health State #{{ health_state.number }}  </h1>
+    <p class="screen_number">{{ screen_number }} of 8</p>
     
     <p><a href="{% url "survey:next_page" %}?complete=true" class="btn btn-primary next_button">Next</a></p>
 </div>

@@ -124,13 +124,20 @@ class SurveyResponse(models.Model):
             'started': self.started,
             'finished': self.finished,
             'rating': rating,
+            'screen_number': self.current_health_state_number
         }
 
     @property
-    def current_health_state(self):
+    def current_health_state_number(self):
         for i in range(1, 9):
             if not self._completed_state(i):
-                return getattr(self, "state_%s" % i)
+                return i
+        return None
+
+    @property
+    def current_health_state(self):
+        if self.current_health_state_number:
+            return getattr(self, "state_%s" % self.current_health_state_number)
         return None
 
     @property

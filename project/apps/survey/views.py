@@ -51,7 +51,7 @@ def entrance(request):
 
         if survey_response.finished():
             return HttpResponseRedirect(reverse("survey:complete"))
-        if survey_response.started():
+        if not created and survey_response.started():
             return HttpResponseRedirect(reverse("survey:in_survey"))
 
     except:
@@ -62,13 +62,13 @@ def entrance(request):
 def next_page(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
-        if survey_response.completed_state_8():
-            survey_response.finish_time = datetime.datetime.now()
-            survey_response.save()
         if "complete" in request.GET:
             hsr = survey_response.current_health_state_rating
             hsr.finish_time = datetime.datetime.now()
             hsr.save()
+        if survey_response.completed_state_8():
+            survey_response.finish_time = datetime.datetime.now()
+            survey_response.save()
         if survey_response.finished():
             return HttpResponseRedirect(reverse("survey:complete"))
     except:
