@@ -3,6 +3,8 @@ from django.conf.urls.defaults import patterns, include, url
 from survey import views
 
 urlpatterns = patterns('',
+    url(r'^temp-logout$', views.temp_logout, name='temp_logout'),
+
     url(r'^$', views.entrance, name='entrance'),
     url(r'^next-page$', views.next_page, name='next_page'),
     url(r'^survey$', views.in_survey, name='in_survey'),

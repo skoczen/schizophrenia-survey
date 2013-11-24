@@ -1,12 +1,15 @@
 from utils.test_helpers import E2ETestCase, wip
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from utils.factory import Factory
+from survey.models import NEXT_SURVEY_PATH_KEY
 
 
 class HomePageTest(E2ETestCase):
 
     def setUp(self, *args, **kwargs):
         super(HomePageTest, self).setUp(*args, **kwargs)
+        cache.delete(NEXT_SURVEY_PATH_KEY)
         self.survey_path_1 = Factory.survey_path(order=1)
         self.survey_path_2 = Factory.survey_path(order=2)
 

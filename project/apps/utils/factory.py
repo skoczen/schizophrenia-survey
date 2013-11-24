@@ -368,22 +368,29 @@ class Factory(DjangoFunctionalFactory):
     @classmethod
     def survey_path(cls, **kwargs):
         if HealthState.objects.count() < MINIMUM_NUM_HEALTH_STATES:
-            for i in range(0, MINIMUM_NUM_HEALTH_STATES):
+            for i in range(1, MINIMUM_NUM_HEALTH_STATES + 1):
                 cls.health_state(number=i)
 
-        all_numbers = HealthState.objects.all().values_list("number", flat=True)
+        all_numbers = list(HealthState.objects.all().values_list("number", flat=True))
+        random.shuffle(all_numbers)
+
+        order = 0
+        if "order" not in kwargs:
+            while SurveyPath.objects.filter(order=order).count() > 0:
+                order = cls.rand_int(0, 9999999)
 
         options = {
-            "order": cls.rand_int(),
-            "state_1": all_numbers[1],
-            "state_2": all_numbers[2],
-            "state_3": all_numbers[3],
-            "state_4": all_numbers[4],
-            "state_5": all_numbers[5],
-            "state_6": all_numbers[6],
-            "state_7": all_numbers[7],
-            "state_8": all_numbers[8],
+            "order": order,
+            "state_1": all_numbers[0],
+            "state_2": all_numbers[1],
+            "state_3": all_numbers[2],
+            "state_4": all_numbers[3],
+            "state_5": all_numbers[4],
+            "state_6": all_numbers[5],
+            "state_7": all_numbers[6],
+            "state_8": all_numbers[7],
         }
+        options.update(**kwargs)
         return SurveyPath.objects.create(**options)
 
     @classmethod

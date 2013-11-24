@@ -78,35 +78,62 @@ class SurveyResponse(models.Model):
     finish_time = models.DateTimeField(blank=True, null=True)
     survey_path_id = models.IntegerField(blank=True)  # For auditing
 
-    state_1 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_2 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_3 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_4 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_5 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_6 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_7 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
-    state_8 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+')
+    state_1 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_2 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_3 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_4 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_5 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_6 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_7 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
+    state_8 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
 
     def __unicode__(self):
         return "User %s" % self.entrance_id
 
     def save(self, *args, **kwargs):
+        created = False
         if not self.id:
+            created = True
             path = SurveyPath.get_next_path()
-            self.survey_path = path.pk
-            for i in range(1, 8):
-                hs = HealthState.objects.get(number=getattr(path, "state_%s" % i))
-                setattr(self, "state_%s" % i, hs)
+            self.survey_path_id = path.pk
 
         super(SurveyResponse, self).save(*args, **kwargs)
+
+        if created:
+            for i in range(1, 9):
+                hs = HealthState.objects.get(number=getattr(path, "state_%s" % i))
+                setattr(self, "state_%s" % i, hs)
+                HealthStateRating.objects.create(survey_response=self, health_state=hs, order=i)
 
     @property
     def ratings(self):
         return self.healthstaterating_set.all()
 
     @property
-    def current_page_context(self):
-        return {}
+    def current_page_context(self, health_state=None):
+        if not health_state:
+            health_state = self.current_health_state
+
+        rating = None
+        if health_state:
+            rating = self.ratings.get(health_state=health_state)
+        return {
+            'health_state': health_state,
+            'started': self.started,
+            'finished': self.finished,
+            'rating': rating,
+        }
+
+    @property
+    def current_health_state(self):
+        for i in range(1, 9):
+            if not self._completed_state(i):
+                return getattr(self, "state_%s" % i)
+        return None
+
+    @property
+    def current_health_state_rating(self):
+        return self.ratings.get(health_state=self.current_health_state)
 
     def _completed_state(self, order):
         try:
@@ -138,6 +165,7 @@ class SurveyResponse(models.Model):
     def completed_state_8(self):
         return self._completed_state(8)
 
+    # For the admin
     completed_state_1.boolean = True
     completed_state_1.short_description = "1"
     completed_state_2.boolean = True

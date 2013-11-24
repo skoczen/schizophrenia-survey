@@ -2,6 +2,7 @@ import datetime
 
 from annoying.decorators import render_to
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
@@ -10,6 +11,11 @@ from .forms import HealthStateSequenceUploadForm
 from .models import SurveyResponse
 from .tasks import update_health_sequences
 from django.contrib.auth.models import User
+
+
+def temp_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("survey:entrance"))
 
 
 @render_to("survey/entrance.html")
@@ -56,6 +62,13 @@ def entrance(request):
 def next_page(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
+        if survey_response.completed_state_8():
+            survey_response.finish_time = datetime.datetime.now()
+            survey_response.save()
+        if "complete" in request.GET:
+            hsr = survey_response.current_health_state_rating
+            hsr.finish_time = datetime.datetime.now()
+            hsr.save()
         if survey_response.finished():
             return HttpResponseRedirect(reverse("survey:complete"))
     except:
@@ -63,7 +76,7 @@ def next_page(request):
     return HttpResponseRedirect(reverse("survey:in_survey"))
 
 
-@render_to("survey/in_survey.html")
+@render_to("survey/health_state.html")
 def in_survey(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
@@ -71,7 +84,7 @@ def in_survey(request):
         context.update(survey_response.current_page_context)
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
-    return locals()
+    return context
 
 
 @render_to("survey/complete.html")

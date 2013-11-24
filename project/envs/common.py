@@ -29,6 +29,13 @@ DATABASES = {
         'PORT': '',
     }
 }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 ALLOWED_HOSTS = ["qi-schizophrenia-staging.herokuapp.com", "qi-schizophrenia-live.herokuapp.com"]
 
 TIME_ZONE = 'America/Vancouver'

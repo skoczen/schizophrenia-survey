@@ -10,7 +10,7 @@ from splinter.browser import Browser
 class E2ETestCase(LiveServerTestCase):
     def setUp(self, *args, **kwargs):
         super(E2ETestCase, self).setUp(*args, **kwargs)
-        self.browser = Browser('phantomjs')
+        self.browser = Browser('chrome')
 
     def tearDown(self, *args, **kwargs):
         self.browser.quit()
@@ -24,7 +24,8 @@ class E2ETestCase(LiveServerTestCase):
         self.browser.visit("%s%s" % (self.live_server_url, url))
 
     def ele(self, css_selector):
-        return self.browser.find_by_css(css_selector)
+        return self.browser.find_by_css(css_selector).first
+
 
 def skip(func):
     def _():
