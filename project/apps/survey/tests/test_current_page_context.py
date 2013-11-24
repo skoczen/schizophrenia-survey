@@ -1,9 +1,9 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 from utils.test_helpers import E2ETestCase, wip, skip
 from utils.factory import Factory
 
 
-class CurrentPageContextTest(TestCase):
+class CurrentPageContextTest(TransactionTestCase):
 
     def setUp(self):
         self.survey_response = Factory.survey_response()

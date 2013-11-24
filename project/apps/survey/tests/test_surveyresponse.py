@@ -1,13 +1,13 @@
 from django.core import mail
 from django.core.cache import cache
-from django.test import TestCase
+from django.test import TransactionTestCase
 from utils.factory import Factory
 from utils.test_helpers import skip, wip
 
 from survey.models import SurveyResponse, SurveyPath, NEXT_SURVEY_PATH_KEY
 
 
-class SurveyResponseTest(TestCase):
+class SurveyResponseTest(TransactionTestCase):
 
     def setUp(self):
         SurveyPath.objects.all().delete()

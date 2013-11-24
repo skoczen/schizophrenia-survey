@@ -1,9 +1,9 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 from utils.factory import Factory
 from utils.test_helpers import skip
 
 
-class SurveyPathTest(TestCase):
+class SurveyPathTest(TransactionTestCase):
 
     def setUp(self):
         self.survey_response = Factory.survey_response()
