@@ -48,9 +48,7 @@ class SurveyPath(models.Model):
     def get_next_path(cls):
         try:
             next_order = cache.incr(NEXT_SURVEY_PATH_KEY)
-            print next_order
             next_path = cls.objects.get(order=next_order)
-            print next_path
             next_path.save()
         except ValueError:
             # Cache key not set yet.

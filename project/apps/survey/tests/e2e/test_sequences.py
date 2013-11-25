@@ -47,9 +47,8 @@ class HomePageTest(E2ETestCase):
 
     def test_sequences_go_through_correctly(self):
         self.visit("%s?survey_id=1234&exit_url=foo.com" % reverse("survey:entrance"))
-        self.browser.is_text_present("Welcome!")
-
-        self.ele(".next_button").click()
+        # self.browser.is_text_present("Welcome!")
+        # self.ele(".next_button").click()
         self.assertEquals(self.ele("h1").text, "Health State #%s" % self.survey_path_1.state_1)
 
         self.ele(".next_button").click()
@@ -58,10 +57,12 @@ class HomePageTest(E2ETestCase):
         self.ele(".next_button").click()
         self.assertEquals(self.ele("h1").text, "Health State #%s" % self.survey_path_1.state_3)
 
+        self.browser.cookies.delete()
+        self.visit("survey:temp_logout")
         self.visit("%s?survey_id=1235&exit_url=foo.com" % reverse("survey:entrance"))
-        self.browser.is_text_present("Welcome!")
+        # self.browser.is_text_present("Welcome!")
+        # self.ele(".next_button").click()
 
-        self.ele(".next_button").click()
         self.assertEquals(self.ele("h1").text, "Health State #%s" % self.survey_path_2.state_1)
 
         self.ele(".next_button").click()
