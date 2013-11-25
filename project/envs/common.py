@@ -158,7 +158,10 @@ LOGGING = {
         }
     },
 }
+import logging
+logger = logging.Logger('app')
+logger.setLevel(logging.WARNING)
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-BROWSER = "phantomjs"
+BROWSER = "chrome"
 SOUTH_TESTS_MIGRATE = False

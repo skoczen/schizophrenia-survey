@@ -1,3 +1,4 @@
+import time
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.test import LiveServerTestCase, TransactionTestCase
@@ -14,9 +15,9 @@ from survey.models import NEXT_SURVEY_PATH_KEY, SurveyPath
 class E2ETestCase(LiveServerTestCase):
     def setUp(self, *args, **kwargs):
         cache.delete(NEXT_SURVEY_PATH_KEY)
-        SurveyPath.objects.all().delete()
         super(E2ETestCase, self).setUp(*args, **kwargs)
         self.browser = Browser(settings.BROWSER)
+        self.browser.cookies.delete()
 
     def tearDown(self, *args, **kwargs):
         self.browser.quit()
@@ -32,10 +33,12 @@ class E2ETestCase(LiveServerTestCase):
     def ele(self, css_selector):
         return self.browser.find_by_css(css_selector).first
 
+    def sleep(self, seconds):
+        time.sleep(seconds)
+
 
 class ClearedTransactionTestCase(TransactionTestCase):
     def setUp(self, *args, **kwargs):
-        print "Setup"
         cache.delete(NEXT_SURVEY_PATH_KEY)
         SurveyPath.objects.all().delete()
         super(ClearedTransactionTestCase, self).setUp(*args, **kwargs)
