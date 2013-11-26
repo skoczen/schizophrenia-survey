@@ -105,6 +105,7 @@ INSTALLED_APPS = (
     "annoying",
     "compressor",
     "django_extensions",
+    "djcelery",
 
     "gunicorn",
     "south",
@@ -126,6 +127,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.request",
 )
+
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://localhost:6379/6'
 
 
 STATICFILES_EXCLUDED_APPS = []

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.cache import cache
+from .tasks import update_aggregate_tasks
 
 NEXT_SURVEY_PATH_KEY = "qi-next-survey-path-id"
 
@@ -71,6 +72,7 @@ class SurveyPath(models.Model):
 
 
 class SurveyResponse(models.Model):
+    last_updated = models.DateTimeField(auto_now=True)
     user = models.ForeignKey('auth.User', editable=False)
     entrance_id = models.CharField(max_length=255)
     exit_url = models.TextField(max_length=255)
@@ -234,6 +236,21 @@ class HealthStateRating(models.Model):
 
     started.boolean = True
     finished.boolean = True
+
+
+class SurveyAggregateStats(models.Model):
+    completion_rate = models.FloatField(blank=True, null=True)
+    average_survey_progress = models.FloatField(blank=True, null=True)
+    dwell_time = models.FloatField(blank=True, null=True)
+
+    @classmethod
+    def first(cls):
+        if cls.objects.count() > 0:
+            return cls.objects.all()[0]
+        else:
+            update_aggregate_tasks()
+            return cls.first
+
 
 # Patch to prevent superuser delete
 from django.db.models.signals import pre_delete

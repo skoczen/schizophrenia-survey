@@ -23,3 +23,58 @@
     display: block;
     margin: -25px 0 30px 0;
 }
+
+
+/* Admin */
+.dashboard {
+    color: #222;
+}
+.dashboard .units {
+    font-size: 0.5em;
+    color: #DDD;
+    margin: 0 0 0 5px;
+}
+.dashboard .section_title {
+    color: #999;
+    margin: 10px 0 0 0;
+    border: 1px solid #AAA;
+    border-width: 0 0 1px 0;
+}
+.dashboard .dashboard_section {
+    padding: 30px 20px 20px 20px;
+    overflow: auto;
+}
+.dashboard .dashboard_block {
+    display: block;
+    overflow: auto;
+    position: relative;
+    width: 31%;
+    float: left;
+    margin: 1%;
+    padding: 20px 10px;
+    color: #222;
+    text-align: center;
+}
+.dashboard .dashboard_block .value {
+    font-size: 60px;
+    border: 1px solid #F2F2F2;
+    width: 100%;
+    padding: 40px 0 0 0;
+    height: 150px;
+}
+.dashboard .dashboard_block .label {
+    font-size: 13px;
+    display: block;
+    color: #CCC;
+    font-weight: normal;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+}
+.dashboard .dashboard_block .insufficient_data {
+    font-size: 20px;
+    color: #999;
+
+}

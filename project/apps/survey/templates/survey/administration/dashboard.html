@@ -1,10 +1,66 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base.html" %}{% load compress %}
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">Survey Dashboard</a></h1>
 {% endblock %}
 
-{% block content %}
-<h1>Admin Dashboard</h1>
+{% block extrahead %}{{block.super}}
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  {% compress css %}
+  <link rel="stylesheet" href="{{STATIC_URL}}base/css/animate.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}base/css/style.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}main_site/css/site.css">
+  {% endcompress %}
+{% endblock %}
 
+{% block content %}
+<div class="dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard_section">
+        <h2 class="section_title">Survey Progress</h2>
+        <div class="dashboard_block">
+            <div class="value">
+                {{stats.completion_rate|default:0|floatformat:"0"}}<span class="units">%</span>
+            </div>
+            <div class="label">Completion Rate</div>
+        </div>
+
+
+        <div class="dashboard_block">
+            <div class="value">
+                {% if stats.average_survey_progress %}{{stats.average_survey_progress|floatformat:"0"}}<span class="units">%</span>{% else %}
+                <span class="insufficient_data">No data</span>{% endif %}
+            </div>
+            <div class="label">Average Survey Progress</div>
+        </div>
+
+
+        <div class="dashboard_block">
+            <div class="value">
+                {% if stats.dwell_time %}{{stats.dwell_time|floatformat:"0"}}<span class="units">min</span>{% else %}
+                <span class="insufficient_data">No data</span>{% endif %}
+            </div>
+            <div class="label">Dwell Time</div>
+        </div>
+    </div>
+
+    <div class="dashboard_section">
+        <h2 class="section_title">Demographic Data</h2>
+        <div class="dashboard_block">
+            <div class="value"><span class="insufficient_data">Insufficient Data</span></div>
+            <div class="label">Age</div>
+        </div>
+
+        <div class="dashboard_block">
+            <div class="value"><span class="insufficient_data">Insufficient Data</span></div>
+            <div class="label">Race</div>
+        </div>
+
+        <div class="dashboard_block">
+            <div class="value"><span class="insufficient_data">Insufficient Data</span></div>
+            <div class="label">Gender</div>
+        </div>
+    </div>
+</div>
 {% endblock %}

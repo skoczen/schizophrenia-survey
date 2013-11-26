@@ -2,7 +2,7 @@ from utils.factory import Factory
 from utils.test_helpers import E2ETestCase, wip
 from django.core.urlresolvers import reverse
 
-@wip
+
 class AdminDashboardTest(E2ETestCase):
 
     def test_dashboard_loads(self):

@@ -1,6 +1,7 @@
 from annoying.decorators import render_to
 from django.contrib.auth.decorators import user_passes_test
 
+from survey.models import SurveyAggregateStats
 from survey.forms import HealthStateSequenceUploadForm
 from survey.tasks import update_health_sequences
 
@@ -24,4 +25,5 @@ def upload_sequence(request):
 @user_passes_test(lambda u: u.groups.filter(name='Survey Administrators').count() == 1)
 @render_to("survey/administration/dashboard.html")
 def dashboard(request):
+    stats = SurveyAggregateStats.first
     return locals()
