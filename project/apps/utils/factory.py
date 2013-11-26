@@ -4,7 +4,7 @@ import base64
 from decimal import getcontext, Decimal
 getcontext().prec = 7
 from django.contrib.localflavor.us.us_states import STATE_CHOICES
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from survey.models import HealthState, SurveyPath, SurveyResponse, HealthStateRating
 
@@ -331,7 +331,7 @@ RANDOM_EMAIL_DOMAINS = ["gmail.com", "yahoo.com", "hotmail.com", "live.com",
 class Factory(DjangoFunctionalFactory):
 
     @classmethod
-    def user(cls, *args, **kwargs):
+    def user(cls, is_admin=False, is_super_admin=False, *args, **kwargs):
         password = kwargs.get("password", cls.rand_str())
         options = {
             "username": cls.rand_str(),
@@ -343,6 +343,15 @@ class Factory(DjangoFunctionalFactory):
 
         u = User.objects.create(**options)
         u.set_password(password)
+
+        if is_admin:
+            admin_group = Group.objects.get_or_create(name="Survey Administrators")[0]
+            u.groups.add(admin_group)
+        if is_super_admin:
+            super_admin_group = Group.objects.get_or_create(name="Survey Super-Admins")[0]
+            u.groups.add(super_admin_group)
+        u.save()
+
         return u, password
 
     @classmethod

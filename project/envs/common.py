@@ -43,6 +43,7 @@ TIME_ZONE = 'America/Vancouver'
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
+LOGIN_URL='/accounts/login/'
 
 USE_I18N = False
 USE_L10N = True

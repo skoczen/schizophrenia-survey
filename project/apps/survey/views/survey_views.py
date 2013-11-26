@@ -7,9 +7,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
 
-from .forms import HealthStateSequenceUploadForm
-from .models import SurveyResponse
-from .tasks import update_health_sequences
+from survey.forms import HealthStateSequenceUploadForm
+from survey.models import SurveyResponse
+from survey.tasks import update_health_sequences
 from django.contrib.auth.models import User
 
 

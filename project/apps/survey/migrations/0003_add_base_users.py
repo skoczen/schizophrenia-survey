@@ -42,6 +42,12 @@ class Migration(DataMigration):
         # Most people administering the survey.
         admin_group = orm['auth.group'].objects.get_or_create(name="Survey Administrators")[0]
 
+        # Dev
+        dev = orm["auth.User"].objects.get(is_superuser=True)
+        dev.groups.add(super_admin_group)
+        dev.groups.add(admin_group)
+        dev.save()
+
         les = orm['auth.user'].objects.get_or_create(
             username="llenert",
             email="leslie.lenert@gmail.com",
