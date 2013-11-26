@@ -12,6 +12,7 @@ class AdminDashboardTest(E2ETestCase):
         # Log in
         self.ele("#id_username").fill(user.username)
         self.ele("#id_password").fill(password)
+        self.sleep(0.1)
         self.ele("input[type=submit]").click()
 
         assert self.browser.is_text_present("Admin Dashboard", wait_time=3)
