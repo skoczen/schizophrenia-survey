@@ -252,6 +252,16 @@ class SurveyAggregateStats(models.Model):
             return cls.first
 
 
+def export_filename(instance, filename):
+    return "exports/Export-%s.csv" % instance.export_date.isoformat(" ")
+
+
+class SurveyExport(models.Model):
+    csv_file = models.FileField(blank=True, null=True, upload_to=export_filename)
+    num_rows = models.IntegerField()
+    export_date = models.DateTimeField(auto_now_add=True)
+
+
 # Patch to prevent superuser delete
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver

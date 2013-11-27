@@ -78,3 +78,17 @@
     color: #999;
 
 }
+
+/* Data Export */
+.data_export a {
+    color: #FFF;
+}
+.data_export a.btn-primary {
+    color: #FFF;
+}
+.data_export .export_table td {
+    padding: 5px;
+}
+.data_export .num_reponses {
+    text-align: center;
+}

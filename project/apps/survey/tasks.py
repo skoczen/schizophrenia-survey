@@ -1,6 +1,8 @@
 import csv
+import tempfile
+from django.core.files import File
 from celery.task.schedules import crontab
-from celery.task import periodic_task
+from celery.task import periodic_task, task
 
 
 def update_health_sequences(sequence_upload_id):
@@ -61,3 +63,101 @@ def update_aggregate_tasks():
         stats.average_survey_progress = None
         stats.dwell_time = None
     stats.save()
+
+
+def _header_row():
+    row = [
+        "Internal ID",
+        "Entrance ID",
+        "Exit URL",
+        "Start Time",
+        "Completion Time",
+        "Survey Path ID",
+        "Health State 1 ID",
+        "Health State 2 ID",
+        "Health State 3 ID",
+        "Health State 4 ID",
+        "Health State 5 ID",
+        "Health State 6 ID",
+        "Health State 7 ID",
+        "Health State 8 ID",
+    ]
+    for i in range(1, 9):
+        row += [
+            "HS %s - Start Time" % i,
+            "HS %s - Completion Time" % i,
+            "HS %s - VAS Rating" % i,
+            "HS %s - TTO Rating" % i,
+            "HS %s - Intro Started" % i,
+            "HS %s - Intro Completed" % i,
+            "HS %s - Intro Completion Time" % i,
+            "HS %s - VAS Started" % i,
+            "HS %s - VAS Completed" % i,
+            "HS %s - VAS Completion Time" % i,
+            "HS %s - TTO Started" % i,
+            "HS %s - TTO Completed" % i,
+            "HS %s - TTO Completion Time" % i,
+            "HS %s - Outro Started" % i,
+            "HS %s - Outro Completed" % i,
+            "HS %s - Outro Completion Time" % i,
+        ]
+    return row
+
+
+def _csv_row(r):
+    row = [
+        r.pk,  # "Internal ID",
+        r.entrance_id,  # "Entrance ID",
+        r.exit_url,  # "Exit URL",
+        r.start_time,  # "Start Time",
+        r.finish_time,  # "Completion Time",
+        r.survey_path_id,  # "Survey Path ID",
+        r.state_1.number,  # "Health State 1 ID",
+        r.state_2.number,  # "Health State 2 ID",
+        r.state_3.number,  # "Health State 3 ID",
+        r.state_4.number,  # "Health State 4 ID",
+        r.state_5.number,  # "Health State 5 ID",
+        r.state_6.number,  # "Health State 6 ID",
+        r.state_7.number,  # "Health State 7 ID",
+        r.state_8.number,  # "Health State 8 ID",
+    ]
+    for i in range(1, 9):
+        hs = r.ratings.get(order=i)
+
+        row += [
+            hs.start_time,
+            hs.finish_time,
+            hs.vas_rating,
+            hs.tto_rating,
+            hs.intro_started,
+            hs.intro_completed,
+            hs.intro_completed_time,
+            hs.vas_started,
+            hs.vas_completed,
+            hs.vas_completed_time,
+            hs.tto_started,
+            hs.tto_completed,
+            hs.tto_completed_time,
+            hs.outro_started,
+            hs.outro_completed,
+            hs.outro_completed_time,
+        ]
+
+    return row
+
+
+@task
+def generate_csv():
+    from .models import SurveyResponse, SurveyExport
+
+    num_responses = 0
+    with tempfile.TemporaryFile() as csvfile:
+        csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(_header_row())
+        for s in SurveyResponse.objects.all():
+            num_responses += 1
+            csv_writer.writerow(_csv_row(s))
+
+        export = SurveyExport.objects.create(num_rows=num_responses)
+        export.csv_file = File(csvfile)
+        export.save()

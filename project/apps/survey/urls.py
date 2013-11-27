@@ -12,5 +12,7 @@ urlpatterns = patterns('',
     url(r'^Unknown-Code$', survey_views.unknown_code, name='unknown_code'),
 
     url(r'^administration/dashboard/?$', admin_views.dashboard, name='admin_dashboard'),
+    url(r'^administration/export/?$', admin_views.data_export, name='admin_data_export'),
+    url(r'^administration/export/generate/?$', admin_views.generate_new_export, name='admin_generate_new_export'),
     url(r'^administration/upload-sequence/?$', admin_views.upload_sequence, name='upload_sequence'),
 )

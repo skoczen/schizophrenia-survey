@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}{% load compress %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Survey Dashboard</a></h1>
+{% endblock %}
+
+{% block extrahead %}{{block.super}}
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  {% compress css %}
+  <link rel="stylesheet" href="{{STATIC_URL}}base/css/animate.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}base/css/style.css">
+  <link rel="stylesheet" href="{{STATIC_URL}}main_site/css/site.css">
+  {% endcompress %}
+{% endblock %}
+
+{% block content %}
+<div class="data_export">
+    <h1>Data Export</h1>
+
+    <a href="{% url "survey:admin_generate_new_export" %}" class="btn btn-success"><i class="glyphicon glyphicon-repeat"></i> Generate new CSV</a>
+    <table class="export_table table table-striped">
+        <tr>
+            <th>Export Date</th>
+            <th class="num_reponses">Number of Responses</th>
+            <th>Download</th>
+        </tr>
+        {% for export in data_exports %}
+        <tr>
+            <td>{{export.export_date|date}} {{export.export_date|time}}</td>
+            <td class="num_reponses">{{export.num_rows}}</td>
+            <td><a href="{{export.csv_file.url}}" class="btn btn-default btn-primary"><i class="glyphicon glyphicon-save"></i> Download</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No exports generated yet.</td><tr>
+        {% endfor %}
+</div>
+{% endblock %}
