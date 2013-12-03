@@ -16,16 +16,16 @@ Boostrapping
 
 2. Set up the your virtualenv, and `pip install fabric`
 
-3. Set up your remotes manually, or by use the fab helper command.
+3. Bootstrap the requirements and setup a dev db.
 	
 	```bash
+    fab refreeze
     fab setup_db
 	```
 
 4. You're set. 
 	
 	```bash
-	cd project
 	./manage.py runserver
 	```
 
