@@ -93,7 +93,7 @@ heroku labs:enable user-env-compile
 			```
 		* For local usage, set the keys in `keys_and_passwords_private.py`
 
-	Keys you're likely want to set:
+	* Keys you're likely want to set:
 
 		```bash
 		heroku config:add AWS_ACCESS_KEY_ID=foo`
@@ -103,7 +103,8 @@ heroku labs:enable user-env-compile
 		# analytics settings.
 		```
 
-6. If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
+
+Note: If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
 
 
 Deploying
