@@ -14,7 +14,7 @@ Boostrapping
 	git clone git@github.com:skoczen/schizophrenia-survey.git
 	```
 
-2. Set up the your virtualenv, and `pip install fabric`
+2. Set up the virtualenv, and `pip install fabric`
 
 3. Bootstrap the requirements and setup a dev db.
 	
@@ -26,9 +26,19 @@ Boostrapping
 4. You're set. 
 	
 	```bash
+    ./manage.py test
 	./manage.py runserver
 	```
 
+
+Running tests
+=============
+
+Tests are run continuously [at CircleCI](https://circleci.com/gh/skoczen/schizophrenia-survey/tree/master).  For local development, you can use the following fabric helpers.
+
+- `fab unit` will run all unit tests
+- `fab e2e` will run all browser (end-to-end) tests
+- `fab wip` will run all tests marked with `@wip` (works in progress)
 
 
 Deploying to Heroku, with AWS for static media
@@ -81,6 +91,7 @@ heroku labs:enable user-env-compile
 		* For local usage, set the keys in `keys_and_passwords_private.py`
 
 	Keys you're likely want to set:
+
 		```bash
 		heroku config:add AWS_ACCESS_KEY_ID=foo`
 		heroku config:add AWS_SECRET_ACCESS_KEY=bar
