@@ -34,6 +34,7 @@ class SurveyPathOptions(admin.ModelAdmin):
 class HealthStateSequenceUploadOptions(admin.ModelAdmin):
     list_display = ('csv_file', 'uploaded_at',)
 
+
 class ActionLogOptions(admin.ModelAdmin):
     list_display = ('user', 'action', 'when')
 

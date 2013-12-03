@@ -59,6 +59,7 @@ heroku addons:add zerigo_dns:basic --app qi-schizophrenia-live
 heroku addons:add memcachier --app qi-schizophrenia-live
 heroku addons:add redistogo:nano --app qi-schizophrenia-live
 heroku addons:add heroku-postgresql
+heroku addons:add pgbackups:auto-month
 heroku labs:enable user-env-compile 
 	```
 
@@ -95,3 +96,10 @@ Deploying
 * `fab deploy`
 
 Note: If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
+
+
+Backups
+=======
+
+Backups are done nightly via heroku's pgbackups.  Backup archives are stored in the qi-schizophrenia-data s3 bucket on AWS.
+Documentation on manual backups and restores are found [in the pgbackups documentation](https://devcenter.heroku.com/articles/pgbackups#import-export).
