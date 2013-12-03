@@ -98,7 +98,7 @@ The project is continuously deployed.
 * `master` is deployed to the `qi-schizophrenia-staging` app,
 * `production` is deployed to the `qi-schizophrenia-live` app, 
 
-* `fab deploy`
+If you need to manually deploy, run `fab deploy`  or `fab deploy target:staging`
 
 Note: If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
 
