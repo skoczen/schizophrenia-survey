@@ -41,8 +41,11 @@ Tests are run continuously [at CircleCI](https://circleci.com/gh/skoczen/schizop
 - `fab wip` will run all tests marked with `@wip` (works in progress)
 
 
-Deploying to Heroku, with AWS for static media
-==============================================
+Deploying
+=========
+
+Deployment is set up with Heroku, with AWS S3 and SES for static media and email.
+
 
 Preparing
 ---------
@@ -99,7 +102,7 @@ heroku labs:enable user-env-compile
 		heroku config:add DB_PASSWORD=pass1234
 		# analytics settings.
 		```
-	
+6. If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
 
 Deploying
 ---------
@@ -107,11 +110,9 @@ Deploying
 The project is continuously deployed.
 
 * `master` is deployed to the `qi-schizophrenia-staging` app,
-* `production` is deployed to the `qi-schizophrenia-live` app, 
+* `production` is deployed to the `qi-schizophrenia-live` app.
 
 If you need to manually deploy, run `fab deploy`  or `fab deploy target:staging`
-
-Note: If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
 
 
 Backups
