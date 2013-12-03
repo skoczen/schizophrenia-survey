@@ -83,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'linaro_django_pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -106,8 +107,8 @@ INSTALLED_APPS = (
     "compressor",
     "django_extensions",
     "djcelery",
-
     "gunicorn",
+    "linaro_django_pagination",
     "south",
 
     "main_site",

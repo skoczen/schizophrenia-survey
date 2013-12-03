@@ -1,4 +1,5 @@
-{% extends "admin/base.html" %}{% load compress %}
+{% extends "admin/base.html" %}{% load compress pagination_tags %}
+
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">Survey Dashboard</a></h1>
@@ -24,6 +25,7 @@
             <th class="num_reponses">Number of Responses</th>
             <th>Download</th>
         </tr>
+        {% autopaginate data_exports 10 %}
         {% for export in data_exports %}
         <tr>
             <td>{{export.export_date|date}} {{export.export_date|time}}</td>
@@ -33,5 +35,7 @@
         {% empty %}
         <tr><td colspan="3">No exports generated yet.</td><tr>
         {% endfor %}
+    </table>
+    {% paginate %}
 </div>
 {% endblock %}

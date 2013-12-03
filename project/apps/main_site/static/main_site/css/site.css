@@ -80,11 +80,14 @@
 }
 
 /* Data Export */
-.data_export a {
+.data_export a.btn {
     color: #FFF;
 }
 .data_export a.btn-primary {
     color: #FFF;
+}
+.data_export .export_table {
+    margin-top: 10px;
 }
 .data_export .export_table td {
     padding: 5px;
