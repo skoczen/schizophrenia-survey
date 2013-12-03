@@ -102,7 +102,9 @@ heroku labs:enable user-env-compile
 		heroku config:add DB_PASSWORD=pass1234
 		# analytics settings.
 		```
+
 6. If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
+
 
 Deploying
 ---------
