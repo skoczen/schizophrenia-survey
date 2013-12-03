@@ -52,7 +52,7 @@ Preparing
 	heroku create --stack cedar mynewproject
 	```
 
-3. I use this set of addons in almost every project
+3. Add the addons
 
 	```bash
 heroku addons:add zerigo_dns:basic --app qi-schizophrenia-live
@@ -93,6 +93,11 @@ heroku labs:enable user-env-compile
 Deploying
 ---------
 
+The project is continuously deployed.
+
+* `master` is deployed to the `qi-schizophrenia-staging` app,
+* `production` is deployed to the `qi-schizophrenia-live` app, 
+
 * `fab deploy`
 
 Note: If you haven't created the AWS bucket, simply running `./manage.py sync_static` will do it for you.
@@ -101,5 +106,7 @@ Note: If you haven't created the AWS bucket, simply running `./manage.py sync_st
 Backups
 =======
 
-Backups are done nightly via heroku's pgbackups.  Backup archives are stored in the qi-schizophrenia-data s3 bucket on AWS.
+Backups are done nightly via heroku's pgbackups.  Backup archives are stored in the `qi-schizophrenia-data` s3 bucket on AWS.
+
+
 Documentation on manual backups and restores are found [in the pgbackups documentation](https://devcenter.heroku.com/articles/pgbackups#import-export).
