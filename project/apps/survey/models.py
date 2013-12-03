@@ -262,6 +262,14 @@ class SurveyExport(models.Model):
     export_date = models.DateTimeField(auto_now_add=True)
 
 
+class ActionLog(models.Model):
+    user = models.ForeignKey('auth.User')
+    when = models.DateTimeField(auto_now_add=True)
+    action = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return "%s - %s" % (self.action, self.user)
+
 # Patch to prevent superuser delete
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver

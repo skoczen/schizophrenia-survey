@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import HealthState, SurveyPath, SurveyResponse, HealthStateRating, HealthStateSequenceUpload
+from models import HealthState, SurveyPath, SurveyResponse, HealthStateRating, HealthStateSequenceUpload, ActionLog
 
 class SurveyResponseOptions(admin.ModelAdmin):
     list_display = ('entrance_id',
@@ -34,8 +34,13 @@ class SurveyPathOptions(admin.ModelAdmin):
 class HealthStateSequenceUploadOptions(admin.ModelAdmin):
     list_display = ('csv_file', 'uploaded_at',)
 
+class ActionLogOptions(admin.ModelAdmin):
+    list_display = ('user', 'action', 'when')
+
+
 admin.site.register(HealthStateSequenceUpload, HealthStateSequenceUploadOptions)
 admin.site.register(HealthState)
 admin.site.register(SurveyPath, SurveyPathOptions)
 admin.site.register(SurveyResponse, SurveyResponseOptions)
+admin.site.register(ActionLog, ActionLogOptions)
 # admin.site.register(HealthStateRating)
