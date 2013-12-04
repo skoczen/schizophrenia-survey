@@ -7,8 +7,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
 
-from survey.forms import HealthStateSequenceUploadForm
+from survey.forms import HealthStateSequenceUploadForm, DemographicForm
 from survey.models import SurveyResponse
+from survey.screens import SCREENS
 from survey.tasks import update_health_sequences
 from django.contrib.auth.models import User
 
@@ -62,6 +63,18 @@ def entrance(request):
 def next_page(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
+        if not survey_response.demographics_complete:
+            if request.method == "POST":
+                form = DemographicsForm(request.POST, instance=survey_response)
+                if form.is_valid():
+                    survey_response = form.save()
+                    survey_response.demographics_complete = True
+                    survey_response.save()
+                else:
+                    return HttpResponseRedirect(reverse("survey:demographics"))
+            else:
+                return HttpResponseRedirect(reverse("survey:demographics"))
+
         if "complete" in request.GET:
             hsr = survey_response.current_health_state_rating
             hsr.finish_time = datetime.datetime.now()
@@ -74,6 +87,18 @@ def next_page(request):
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return HttpResponseRedirect(reverse("survey:in_survey"))
+
+
+@render_to("survey/health_state.html")
+def demographics(request):
+    try:
+        survey_response = SurveyResponse.objects.get(user=request.user)
+        form = DemographicsForm(instance=survey_response)
+        context = locals()
+        context.update(survey_response.current_page_context)
+    except:
+        return HttpResponseRedirect(reverse("survey:unknown_code"))
+    return context
 
 
 @render_to("survey/health_state.html")

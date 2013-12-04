@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^$', survey_views.entrance, name='entrance'),
     url(r'^next-page$', survey_views.next_page, name='next_page'),
     url(r'^survey$', survey_views.in_survey, name='in_survey'),
+    url(r'^basic-info$', survey_views.demographics, name='demographics'),
     url(r'^complete$', survey_views.complete, name='complete'),
     url(r'^Unknown-Code$', survey_views.unknown_code, name='unknown_code'),
 

@@ -81,6 +81,21 @@ def _header_row():
         "Health State 6 ID",
         "Health State 7 ID",
         "Health State 8 ID",
+        "Age",
+        "Education",
+        "Household income",
+        "Diagnosed with serious mental illness",
+        "Diagnosed with schizophrenia",
+        "Diagnosed with depression",
+        "Diagnosed with bipolar",
+        "Diagnosed with other",
+        "Diagnosed with dont know",
+        "Family diagnosed with serious mental illness",
+        "Family diagnosed with schizophrenia",
+        "Family diagnosed with depression",
+        "Family diagnosed with bipolar",
+        "Family diagnosed with other",
+        "Family diagnosed with dont know"
     ]
     for i in range(1, 9):
         row += [
@@ -120,6 +135,21 @@ def _csv_row(r):
         r.state_6.number,  # "Health State 6 ID",
         r.state_7.number,  # "Health State 7 ID",
         r.state_8.number,  # "Health State 8 ID",
+        r.age,
+        r.education,
+        r.household_income,
+        r.diagnosed_with_serious_mental_illness,
+        r.diagnosed_with_schizophrenia,
+        r.diagnosed_with_depression,
+        r.diagnosed_with_bipolar,
+        r.diagnosed_with_other,
+        r.diagnosed_with_dont_know,
+        r.family_diagnosed_with_serious_mental_illness,
+        r.family_diagnosed_with_schizophrenia,
+        r.family_diagnosed_with_depression,
+        r.family_diagnosed_with_bipolar,
+        r.family_diagnosed_with_other,
+        r.family_diagnosed_with_dont_know,
     ]
     for i in range(1, 9):
         hs = r.ratings.get(order=i)

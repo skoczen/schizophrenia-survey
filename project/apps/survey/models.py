@@ -3,7 +3,21 @@ from django.core.cache import cache
 from .tasks import update_aggregate_tasks
 
 NEXT_SURVEY_PATH_KEY = "qi-next-survey-path-id"
-
+EDUCATION_CHOICES = [
+    ("Some high school", "Some high school"),
+    ("High school diploma", "High school diploma"),
+    ("Some college", "Some college"),
+    ("College degree", "College degree"),
+    ("Graduate degree", "Graduate degree"),
+]
+HOUSEHOLD_INCOME_CHOICES = [
+    ("Less than 20,000", "Less than 20,000"),
+    ("20,000-40,000", "20,000-40,000"),
+    ("40,000-60,000", "40,000-60,000"),
+    ("60,000-80,000", "60,000-80,000"),
+    ("80,000-100,000", "80,000-100,000"),
+    ("Greater than 100,000", "Greater than 100,000"),
+]
 
 class HealthStateSequenceUpload(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, blank=True)
@@ -79,6 +93,24 @@ class SurveyResponse(models.Model):
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
     survey_path_id = models.IntegerField(blank=True)  # For auditing
+
+    # Demographic Data
+    age = models.IntegerField(blank=True, null=True)
+    education = models.CharField(blank=True, null=True, choices=EDUCATION_CHOICES, max_length=200)
+    household_income = models.CharField(blank=True, null=True, choices=HOUSEHOLD_INCOME_CHOICES, max_length=200)
+    diagnosed_with_serious_mental_illness = models.BooleanField(default=False)
+    diagnosed_with_schizophrenia = models.BooleanField(default=False)
+    diagnosed_with_depression = models.BooleanField(default=False)
+    diagnosed_with_bipolar = models.BooleanField(default=False)
+    diagnosed_with_other = models.BooleanField(default=False)
+    diagnosed_with_dont_know = models.BooleanField(default=False)
+    family_diagnosed_with_serious_mental_illness = models.BooleanField(default=False)
+    family_diagnosed_with_schizophrenia = models.BooleanField(default=False)
+    family_diagnosed_with_depression = models.BooleanField(default=False)
+    family_diagnosed_with_bipolar = models.BooleanField(default=False)
+    family_diagnosed_with_other = models.BooleanField(default=False)
+    family_diagnosed_with_dont_know = models.BooleanField(default=False)
+    demographics_complete = models.BooleanField(default=False)
 
     state_1 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
     state_2 = models.ForeignKey(HealthState, blank=True, null=True, related_name='+', on_delete=models.PROTECT)
