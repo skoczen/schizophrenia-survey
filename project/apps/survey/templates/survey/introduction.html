@@ -1,0 +1,8 @@
+{% extends "survey/base.html" %}{% load compress %}
+
+{% block content %}
+<div class="introduction">
+    <h1>Introduction</h1>
+    <a href="{% url "survey:next_screen" %}" class="btn btn-primary">Next</a>
+</div>
+{% endblock %}

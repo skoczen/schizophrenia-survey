@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.cache import cache
 from .tasks import update_aggregate_tasks
+from .screens import SCREENS
 
 NEXT_SURVEY_PATH_KEY = "qi-next-survey-path-id"
 EDUCATION_CHOICES = [
@@ -93,6 +94,7 @@ class SurveyResponse(models.Model):
     start_time = models.DateTimeField(blank=True, null=True)
     finish_time = models.DateTimeField(blank=True, null=True)
     survey_path_id = models.IntegerField(blank=True)  # For auditing
+    last_screen_id = models.IntegerField(default=0)
 
     # Demographic Data
     age = models.IntegerField(blank=True, null=True)
@@ -143,8 +145,23 @@ class SurveyResponse(models.Model):
     def ratings(self):
         return self.healthstaterating_set.all()
 
+    def get_screen_for(self, screen_id):
+        for s in SCREENS:
+            if s["id"] == screen_id:
+                return s
+        return None
+
+    def mark_screen_complete(self, screen_id):
+        s = self.get_screen_for(screen_id)
+        if s:
+            if s["order"] > self.last_screen_id:
+                self.last_screen_id = s["order"]
+                self.save()
+        else:
+            raise Exception("mark_screen_complete called for %s, which isn't a valid id." % screen_id)
+
     @property
-    def current_page_context(self, health_state=None):
+    def current_screen_context(self, health_state=None):
         if not health_state:
             health_state = self.current_health_state
 

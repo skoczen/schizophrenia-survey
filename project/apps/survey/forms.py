@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, ValidationError
 from .models import HealthStateSequenceUpload, SurveyResponse
 
 
@@ -16,3 +16,8 @@ class DemographicForm(ModelForm):
             "family_diagnosed_with_schizophrenia", "family_diagnosed_with_depression",
             "family_diagnosed_with_bipolar", "family_diagnosed_with_other", "family_diagnosed_with_dont_know",
         )
+
+    def clean_age(self):
+        data = self.cleaned_data['age']
+        if data < 0 or data > 130:
+            raise ValidationError("Please enter a valid age.")

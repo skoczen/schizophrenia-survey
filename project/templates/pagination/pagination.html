@@ -27,7 +27,7 @@
   {% endblock pagelinks %}
   {% block nextlink %}
   {% if page_obj.has_next %}
-  <li><a href="?page{{ page_suffix }}={{ page_obj.next_page_number }}{{ getvars }}" class="next">{% trans "next" %}{{ next_link_decorator|safe }}</a></li>
+  <li><a href="?page{{ page_suffix }}={{ page_obj.next_screen_number }}{{ getvars }}" class="next">{% trans "next" %}{{ next_link_decorator|safe }}</a></li>
   {% else %}
   {% if display_disabled_next_link %}
   <li class="disabled"><a href="#">{% trans "next" %}{{ next_link_decorator|safe }}</a></li>

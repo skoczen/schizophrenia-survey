@@ -15,8 +15,9 @@ from django.contrib.auth.models import User
 
 
 def temp_logout(request):
+    from utils.factory import Factory
     logout(request)
-    return HttpResponseRedirect(reverse("survey:entrance"))
+    return HttpResponseRedirect("%s?exit_url=http://a.com&survey_id=%s" % (reverse("survey:entrance"), Factory.rand_int(start=100000000, end=999999999)))
 
 
 @render_to("survey/entrance.html")
@@ -49,67 +50,100 @@ def entrance(request):
         if exit_url:
             survey_response.exit_url = exit_url
         survey_response.save()
+        if survey_response.last_screen_id != 0:
+            return HttpResponseRedirect(reverse("survey:next_screen"))
 
-        if survey_response.finished():
-            return HttpResponseRedirect(reverse("survey:complete"))
-        if not created and survey_response.started():
-            return HttpResponseRedirect(reverse("survey:in_survey"))
-
+        survey_response.mark_screen_complete("entrance")
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()
 
 
-def next_page(request):
+def next_screen(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
-        if not survey_response.demographics_complete:
-            if request.method == "POST":
-                form = DemographicsForm(request.POST, instance=survey_response)
-                if form.is_valid():
-                    survey_response = form.save()
-                    survey_response.demographics_complete = True
-                    survey_response.save()
-                else:
-                    return HttpResponseRedirect(reverse("survey:demographics"))
-            else:
-                return HttpResponseRedirect(reverse("survey:demographics"))
-
-        if "complete" in request.GET:
-            hsr = survey_response.current_health_state_rating
-            hsr.finish_time = datetime.datetime.now()
-            hsr.save()
-        if survey_response.completed_state_8():
-            survey_response.finish_time = datetime.datetime.now()
-            survey_response.save()
-        if survey_response.finished():
-            return HttpResponseRedirect(reverse("survey:complete"))
-    except:
+        screen = SCREENS[survey_response.last_screen_id + 1]
+        return HttpResponseRedirect(reverse(screen["reverse_url"], args=screen["reverse_args"]))
+    except SurveyResponse.DoesNotExist:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
-    return HttpResponseRedirect(reverse("survey:in_survey"))
 
 
-@render_to("survey/health_state.html")
+def specific_screen(request):
+    survey_response = SurveyResponse.objects.get(user=request.user)
+    if "screen_id" in request.GET:
+        screen_id = int(request.GET["screen_id"])
+        if screen_id <= survey_response.last_screen_id + 1:
+            screen = SCREENS[screen_id]
+            return HttpResponseRedirect(reverse(screen["reverse_url"], args=screen["reverse_args"]))
+
+    return HttpResponseRedirect(reverse("survey:next_screen"))
+
+
+@render_to("survey/demographics.html")
 def demographics(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
-        form = DemographicsForm(instance=survey_response)
+        if request.method == "POST":
+            form = DemographicForm(request.POST, instance=survey_response)
+            if form.is_valid():
+                survey_response = form.save()
+                survey_response.demographics_complete = True
+                survey_response.save()
+                survey_response.mark_screen_complete("demographics")
+                return HttpResponseRedirect(reverse("survey:next_screen"))
+        else:
+            form = DemographicForm(instance=survey_response)
         context = locals()
-        context.update(survey_response.current_page_context)
+        context.update(survey_response.current_screen_context)
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return context
 
 
-@render_to("survey/health_state.html")
-def in_survey(request):
+def read_only_screen(request, screen_complete_name):
     try:
+
         survey_response = SurveyResponse.objects.get(user=request.user)
+        s = survey_response.get_screen_for(screen_complete_name)
+        if s["order"] > survey_response.last_screen_id + 1:
+            return HttpResponseRedirect(reverse("survey:next_screen"))
+
         context = locals()
-        context.update(survey_response.current_page_context)
+        context.update(survey_response.current_screen_context)
+        survey_response.mark_screen_complete(screen_complete_name)
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return context
+
+
+@render_to("survey/introduction.html")
+def introduction(request):
+    return read_only_screen(request, "introduction")
+
+
+@render_to("survey/health_state_intro.html")
+def health_state_intro(request, health_state_number):
+    return read_only_screen(request, "hs%s_intro" % health_state_number)
+
+
+@render_to("survey/health_state_video.html")
+def health_state_video(request, health_state_number):
+    return read_only_screen(request, "hs%s_video" % health_state_number)
+
+
+@render_to("survey/health_state_sg.html")
+def health_state_sg(request, health_state_number):
+    return read_only_screen(request, "hs%s_sg" % health_state_number)
+
+
+@render_to("survey/health_state_tto.html")
+def health_state_tto(request, health_state_number):
+    return read_only_screen(request, "hs%s_tto" % health_state_number)
+
+
+@render_to("survey/health_state_outro.html")
+def health_state_outro(request, health_state_number):
+    return read_only_screen(request, "hs%s_outro" % health_state_number)
 
 
 @render_to("survey/complete.html")
