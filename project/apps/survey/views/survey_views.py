@@ -52,8 +52,6 @@ def entrance(request):
         survey_response.save()
         if survey_response.last_screen_id != 0:
             return HttpResponseRedirect(reverse("survey:next_screen"))
-
-        survey_response.mark_screen_complete("entrance")
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return locals()
@@ -83,6 +81,7 @@ def specific_screen(request):
 def demographics(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_response.mark_screen_complete("entrance")
         if request.method == "POST":
             form = DemographicForm(request.POST, instance=survey_response)
             if form.is_valid():
@@ -94,8 +93,8 @@ def demographics(request):
         else:
             form = DemographicForm(instance=survey_response)
         context = locals()
-        context.update(survey_response.current_screen_context)
     except:
+        import traceback; traceback.print_exc();
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return context
 
@@ -104,14 +103,15 @@ def read_only_screen(request, screen_complete_name):
     try:
 
         survey_response = SurveyResponse.objects.get(user=request.user)
-        s = survey_response.get_screen_for(screen_complete_name)
-        if s["order"] > survey_response.last_screen_id + 1:
+        screen = survey_response.get_screen_for(screen_complete_name)
+        if screen["order"] > survey_response.last_screen_id + 1:
             return HttpResponseRedirect(reverse("survey:next_screen"))
 
         context = locals()
-        context.update(survey_response.current_screen_context)
         survey_response.mark_screen_complete(screen_complete_name)
+
     except:
+        import traceback; traceback.print_exc();
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return context
 
@@ -121,29 +121,49 @@ def introduction(request):
     return read_only_screen(request, "introduction")
 
 
+def health_state_screen(request, section, health_state_number):
+    now = datetime.datetime.now()
+    context = read_only_screen(request, "hs%s_%s" % (health_state_number, section))
+
+    sr = context["survey_response"]
+    health_state = getattr(sr, "state_%s" % health_state_number)
+    health_state_rating = sr.ratings.get(health_state=health_state)
+
+    if section == "outro" and health_state_rating.start_time is None:
+        health_state_rating.start_time = now
+    setattr(health_state_rating, "%s_completed" % section, True)
+    setattr(health_state_rating, "%s_completed_time" % section, now)
+    if section == "outro":
+        health_state_rating.finish_time = now
+    health_state_rating.save()
+
+    context['health_state'] = health_state
+    context['health_state_rating'] = health_state_rating
+    return context
+
 @render_to("survey/health_state_intro.html")
 def health_state_intro(request, health_state_number):
-    return read_only_screen(request, "hs%s_intro" % health_state_number)
+    return health_state_screen(request, "intro", health_state_number)
 
 
 @render_to("survey/health_state_video.html")
 def health_state_video(request, health_state_number):
-    return read_only_screen(request, "hs%s_video" % health_state_number)
+    return health_state_screen(request, "video", health_state_number)
 
 
-@render_to("survey/health_state_sg.html")
-def health_state_sg(request, health_state_number):
-    return read_only_screen(request, "hs%s_sg" % health_state_number)
+@render_to("survey/health_state_vas.html")
+def health_state_vas(request, health_state_number):
+    return health_state_screen(request, "vas", health_state_number)
 
 
 @render_to("survey/health_state_tto.html")
 def health_state_tto(request, health_state_number):
-    return read_only_screen(request, "hs%s_tto" % health_state_number)
+    return health_state_screen(request, "tto", health_state_number)
 
 
 @render_to("survey/health_state_outro.html")
 def health_state_outro(request, health_state_number):
-    return read_only_screen(request, "hs%s_outro" % health_state_number)
+    return health_state_screen(request, "outro", health_state_number)
 
 
 @render_to("survey/complete.html")

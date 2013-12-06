@@ -103,16 +103,14 @@ def _header_row():
             "HS %s - Completion Time" % i,
             "HS %s - VAS Rating" % i,
             "HS %s - TTO Rating" % i,
-            "HS %s - Intro Started" % i,
             "HS %s - Intro Completed" % i,
             "HS %s - Intro Completion Time" % i,
-            "HS %s - VAS Started" % i,
+            "HS %s - Video Completed" % i,
+            "HS %s - Video Completion Time" % i,
             "HS %s - VAS Completed" % i,
             "HS %s - VAS Completion Time" % i,
-            "HS %s - TTO Started" % i,
             "HS %s - TTO Completed" % i,
             "HS %s - TTO Completion Time" % i,
-            "HS %s - Outro Started" % i,
             "HS %s - Outro Completed" % i,
             "HS %s - Outro Completion Time" % i,
         ]
@@ -159,16 +157,14 @@ def _csv_row(r):
             hs.finish_time,
             hs.vas_rating,
             hs.tto_rating,
-            hs.intro_started,
             hs.intro_completed,
             hs.intro_completed_time,
-            hs.vas_started,
+            hs.video_completed,
+            hs.video_completed_time,
             hs.vas_completed,
             hs.vas_completed_time,
-            hs.tto_started,
             hs.tto_completed,
             hs.tto_completed_time,
-            hs.outro_started,
             hs.outro_completed,
             hs.outro_completed_time,
         ]
@@ -184,7 +180,7 @@ def generate_csv():
     with tempfile.TemporaryFile() as csvfile:
         csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(_header_row())
-        for s in SurveyResponse.objects.all():
+        for s in SurveyResponse.objects.all().order_by("id"):
             num_responses += 1
             csv_writer.writerow(_csv_row(s))
 

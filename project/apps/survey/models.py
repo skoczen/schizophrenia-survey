@@ -161,37 +161,11 @@ class SurveyResponse(models.Model):
             raise Exception("mark_screen_complete called for %s, which isn't a valid id." % screen_id)
 
     @property
-    def current_screen_context(self, health_state=None):
-        if not health_state:
-            health_state = self.current_health_state
-
-        rating = None
-        if health_state:
-            rating = self.ratings.get(health_state=health_state)
-        return {
-            'health_state': health_state,
-            'started': self.started,
-            'finished': self.finished,
-            'rating': rating,
-            'screen_number': self.current_health_state_number
-        }
-
-    @property
     def current_health_state_number(self):
         for i in range(1, 9):
             if not self._completed_state(i):
                 return i
         return None
-
-    @property
-    def current_health_state(self):
-        if self.current_health_state_number:
-            return getattr(self, "state_%s" % self.current_health_state_number)
-        return None
-
-    @property
-    def current_health_state_rating(self):
-        return self.ratings.get(health_state=self.current_health_state)
 
     def _completed_state(self, order):
         try:
@@ -261,19 +235,18 @@ class HealthStateRating(models.Model):
     vas_rating = models.FloatField(blank=True, null=True)
     tto_rating = models.FloatField(blank=True, null=True)
 
-    intro_started = models.BooleanField(default=False)
     intro_completed = models.BooleanField(default=False)
     intro_completed_time = models.DateTimeField(blank=True, null=True)
 
-    vas_started = models.BooleanField(default=False)
+    video_completed = models.BooleanField(default=False)
+    video_completed_time = models.DateTimeField(blank=True, null=True)
+
     vas_completed = models.BooleanField(default=False)
     vas_completed_time = models.DateTimeField(blank=True, null=True)
 
-    tto_started = models.BooleanField(default=False)
     tto_completed = models.BooleanField(default=False)
     tto_completed_time = models.DateTimeField(blank=True, null=True)
 
-    outro_started = models.BooleanField(default=False)
     outro_completed = models.BooleanField(default=False)
     outro_completed_time = models.DateTimeField(blank=True, null=True)
 

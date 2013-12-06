@@ -32,30 +32,35 @@ for i in range(1, 9):
             "title": "Health State %s Intro" % i,
             "reverse_url": "survey:health_state_intro",
             "reverse_args": (i,),
+            "health_state_number": i,
         },
         {
             "id": "hs%s_video" % i,
             "title": "Health State %s Video" % i,
             "reverse_url": "survey:health_state_video",
             "reverse_args": (i,),
+            "health_state_number": i,
         },
         {
-            "id": "hs%s_sg" % i,
-            "title": "Health State %s Standard Gamble" % i,
-            "reverse_url": "survey:health_state_sg",
+            "id": "hs%s_vas" % i,
+            "title": "Health State %s Vertical Scale" % i,
+            "reverse_url": "survey:health_state_vas",
             "reverse_args": (i,),
+            "health_state_number": i,
         },
         {
             "id": "hs%s_tto" % i,
             "title": "Health State %s Time Trade-off" % i,
             "reverse_url": "survey:health_state_tto",
             "reverse_args": (i,),
+            "health_state_number": i,
         },
         {
             "id": "hs%s_outro" % i,
             "title": "Health State %s Complete" % i,
             "reverse_url": "survey:health_state_outro",
             "reverse_args": (i,),
+            "health_state_number": i,
         },
     ])
 SCREEN_DESCRIPTIONS_AND_URL_NAME.extend([

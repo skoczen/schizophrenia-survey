@@ -166,8 +166,9 @@ LOGGING = {
     },
 }
 import logging
-logger = logging.Logger('app')
-logger.setLevel(logging.WARNING)
+selenium_logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+selenium_logger.setLevel(logging.WARNING)
+logging.getLogger().setLevel(logging.WARNING)
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 BROWSER = "chrome"
