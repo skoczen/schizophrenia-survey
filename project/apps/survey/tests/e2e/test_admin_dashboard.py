@@ -15,4 +15,4 @@ class AdminDashboardTest(E2ETestCase):
         self.sleep(0.1)
         self.ele("input[type=submit]").click()
 
-        assert self.browser.is_text_present("Admin Dashboard", wait_time=5)
+        assert self.browser.is_text_present("Admin Dashboard", wait_time=10)

@@ -4,7 +4,7 @@ from django.core.cache import cache
 from utils.factory import Factory
 from survey.models import NEXT_SURVEY_PATH_KEY
 
-@wip
+
 class HomePageTest(E2ETestCase):
 
     def setUp(self, *args, **kwargs):
