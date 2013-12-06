@@ -8,5 +8,3 @@ class CurrentPageContextTest(ClearedTransactionTestCase):
         super(CurrentPageContextTest, self).setUp()
         self.survey_response = Factory.survey_response()
 
-    def test_context_returns_a_dict(self):
-        self.assertEquals(type({}), type(self.survey_response.current_page_context))
