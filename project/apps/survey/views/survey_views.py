@@ -99,7 +99,7 @@ def demographics(request):
     return context
 
 
-def read_only_screen(request, screen_complete_name, mark_complete=False):
+def read_only_screen(request, screen_complete_name, mark_complete=True):
     try:
 
         survey_response = SurveyResponse.objects.get(user=request.user)

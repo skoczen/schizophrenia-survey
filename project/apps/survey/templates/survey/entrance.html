@@ -4,7 +4,7 @@
 <div class="entrance">
     <h1>Welcome.</h1>
     
-    <p>Your survey ID is {{ survey_id }}.  Click below to start the survey.</p>
+    <p>Your survey ID is {{ survey_response.entrance_id }}.  Click below to start the survey.</p>
     <p><a href="{% url "survey:next_screen" %}" class="btn btn-primary next_button">Begin survey</a></p>
 </div>
 {% endblock %}
