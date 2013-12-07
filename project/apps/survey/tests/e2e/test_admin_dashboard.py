@@ -17,3 +17,17 @@ class AdminDashboardTest(E2ETestCase):
         self.ele("input[type=submit]").click()
 
         assert self.browser.is_text_present("Admin Dashboard", wait_time=10)
+
+    def test_dashboard_404s_for_non_admins(self):
+        user, password = Factory.user()
+        self.visit(reverse("survey:admin_dashboard"))
+
+        # Log in
+        self.sleep(1)
+        self.ele("#id_username").fill(user.username)
+        self.ele("#id_password").fill(password)
+        self.sleep(0.1)
+        self.ele("input[type=submit]").click()
+
+        assert not self.browser.is_text_present("Admin Dashboard", wait_time=10)
+        assert self.browser.is_element_present_by_css("#id_username")

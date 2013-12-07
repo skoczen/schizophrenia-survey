@@ -2,7 +2,7 @@ from utils.test_helpers import skip, wip, ClearedTransactionTestCase
 from utils.factory import Factory
 from survey.tasks import _header_row, _csv_row
 
-@wip
+
 class CurrentPageContextTest(ClearedTransactionTestCase):
 
     def setUp(self):
