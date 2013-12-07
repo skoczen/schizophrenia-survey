@@ -402,7 +402,7 @@ class Factory(DjangoFunctionalFactory):
         return SurveyPath.objects.create(**options)
 
     @classmethod
-    def survey_response(cls, **kwargs):
+    def survey_response(cls, with_ratings=False, **kwargs):
         cls.survey_path()
 
         user = None
@@ -416,4 +416,27 @@ class Factory(DjangoFunctionalFactory):
             "start_time": datetime.datetime.now(),
         }
         options.update(**kwargs)
-        return SurveyResponse.objects.create(**options)
+        sr = SurveyResponse.objects.create(**options)
+        if with_ratings:
+            for hsr in sr.ratings:
+                hsr.tto_rating = cls.rand_int()
+                hsr.vas_rating = cls.rand_int()
+                hsr.start_time = cls.rand_date()
+                hsr.finish_time = cls.rand_date()
+                hsr.intro_completed = cls.rand_bool()
+                if hsr.intro_completed:
+                    hsr.intro_completed_time = cls.rand_date()
+                    hsr.video_completed = cls.rand_bool()
+                    if hsr.video_completed:
+                        hsr.video_completed_time = cls.rand_date()
+                        hsr.vas_completed = cls.rand_bool()
+                        if hsr.vas_completed:
+                            hsr.vas_completed_time = cls.rand_date()
+                            hsr.tto_completed = cls.rand_bool()
+                            if hsr.tto_completed:
+                                hsr.tto_completed_time = cls.rand_date()
+                                hsr.outro_completed = cls.rand_bool()
+                                if hsr.outro_completed:
+                                    hsr.outro_completed_time = cls.rand_date()
+                hsr.save()
+        return sr
