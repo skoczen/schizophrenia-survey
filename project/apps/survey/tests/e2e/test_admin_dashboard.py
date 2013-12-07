@@ -10,7 +10,7 @@ class AdminDashboardTest(E2ETestCase):
         self.visit(reverse("survey:admin_dashboard"))
 
         # Log in
-        self.sleep(1)
+        self.sleep(2)
         self.ele("#id_username").fill(user.username)
         self.ele("#id_password").fill(password)
         self.sleep(0.1)
@@ -23,11 +23,12 @@ class AdminDashboardTest(E2ETestCase):
         self.visit(reverse("survey:admin_dashboard"))
 
         # Log in
-        self.sleep(1)
+        self.sleep(2)
         self.ele("#id_username").fill(user.username)
         self.ele("#id_password").fill(password)
         self.sleep(0.1)
         self.ele("input[type=submit]").click()
 
+        self.sleep(2)
         assert not self.browser.is_text_present("Admin Dashboard", wait_time=10)
         assert self.browser.is_element_present_by_css("#id_username")
