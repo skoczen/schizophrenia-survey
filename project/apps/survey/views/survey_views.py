@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
 
-from survey.forms import HealthStateSequenceUploadForm, DemographicForm
+from survey.forms import HealthStateSequenceUploadForm, DemographicForm, VASForm, TTOForm
 from survey.models import SurveyResponse
 from survey.screens import SCREENS
 from survey.tasks import update_health_sequences
@@ -99,7 +99,7 @@ def demographics(request):
     return context
 
 
-def read_only_screen(request, screen_complete_name):
+def read_only_screen(request, screen_complete_name, mark_complete=False):
     try:
 
         survey_response = SurveyResponse.objects.get(user=request.user)
@@ -108,7 +108,8 @@ def read_only_screen(request, screen_complete_name):
             return HttpResponseRedirect(reverse("survey:next_screen"))
 
         context = locals()
-        survey_response.mark_screen_complete(screen_complete_name)
+        if mark_complete:
+            survey_response.mark_screen_complete(screen_complete_name)
 
     except:
         import traceback; traceback.print_exc();
@@ -121,24 +122,25 @@ def introduction(request):
     return read_only_screen(request, "introduction")
 
 
-def health_state_screen(request, section, health_state_number):
+def health_state_screen(request, section, health_state_number, mark_complete=True):
     now = datetime.datetime.now()
-    context = read_only_screen(request, "hs%s_%s" % (health_state_number, section))
+    context = read_only_screen(request, "hs%s_%s" % (health_state_number, section), mark_complete=mark_complete)
+    if isinstance(context, dict):
+        sr = context["survey_response"]
+        health_state = getattr(sr, "state_%s" % health_state_number)
+        health_state_rating = sr.ratings.get(health_state=health_state)
 
-    sr = context["survey_response"]
-    health_state = getattr(sr, "state_%s" % health_state_number)
-    health_state_rating = sr.ratings.get(health_state=health_state)
+        if section == "outro" and health_state_rating.start_time is None:
+            health_state_rating.start_time = now
+        if mark_complete:
+            setattr(health_state_rating, "%s_completed" % section, True)
+            setattr(health_state_rating, "%s_completed_time" % section, now)
+            if section == "outro":
+                health_state_rating.finish_time = now
+        health_state_rating.save()
 
-    if section == "outro" and health_state_rating.start_time is None:
-        health_state_rating.start_time = now
-    setattr(health_state_rating, "%s_completed" % section, True)
-    setattr(health_state_rating, "%s_completed_time" % section, now)
-    if section == "outro":
-        health_state_rating.finish_time = now
-    health_state_rating.save()
-
-    context['health_state'] = health_state
-    context['health_state_rating'] = health_state_rating
+        context['health_state'] = health_state
+        context['health_state_rating'] = health_state_rating
     return context
 
 @render_to("survey/health_state_intro.html")
@@ -153,12 +155,40 @@ def health_state_video(request, health_state_number):
 
 @render_to("survey/health_state_vas.html")
 def health_state_vas(request, health_state_number):
-    return health_state_screen(request, "vas", health_state_number)
+    base_context = health_state_screen(request, "vas", health_state_number, mark_complete=False)
+
+    if request.method == "POST":
+        form = VASForm(request.POST, instance=base_context["health_state_rating"])
+        if form.is_valid():
+            form.save()
+
+            # Mark complete
+            health_state_screen(request, "vas", health_state_number)
+            return HttpResponseRedirect(reverse("survey:next_screen"))
+    else:
+        form = VASForm(instance=base_context["health_state_rating"])
+
+    base_context.update(locals())
+    return base_context
 
 
 @render_to("survey/health_state_tto.html")
 def health_state_tto(request, health_state_number):
-    return health_state_screen(request, "tto", health_state_number)
+    base_context = health_state_screen(request, "tto", health_state_number, mark_complete=False)
+
+    if request.method == "POST":
+        form = TTOForm(request.POST, instance=base_context["health_state_rating"])
+        if form.is_valid():
+            form.save()
+
+            # Mark complete
+            health_state_screen(request, "tto", health_state_number)
+            return HttpResponseRedirect(reverse("survey:next_screen"))
+    else:
+        form = TTOForm(instance=base_context["health_state_rating"])
+
+    base_context.update(locals())
+    return base_context
 
 
 @render_to("survey/health_state_outro.html")

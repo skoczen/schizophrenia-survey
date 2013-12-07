@@ -1,5 +1,5 @@
 from django.forms import ModelForm, ValidationError
-from .models import HealthStateSequenceUpload, SurveyResponse
+from .models import HealthStateSequenceUpload, SurveyResponse, HealthStateRating
 
 
 class HealthStateSequenceUploadForm(ModelForm):
@@ -21,3 +21,28 @@ class DemographicForm(ModelForm):
         data = self.cleaned_data['age']
         if data < 0 or data > 130:
             raise ValidationError("Please enter a valid age.")
+        return data
+
+
+class VASForm(ModelForm):
+    class Meta:
+        model = HealthStateRating
+        fields = ("vas_rating",)
+
+    def clean_vas_rating(self):
+        data = self.cleaned_data['vas_rating']
+        if data is None:
+            raise ValidationError("This field is required.")
+        return data
+
+
+class TTOForm(ModelForm):
+    class Meta:
+        model = HealthStateRating
+        fields = ("tto_rating",)
+
+    def clean_tto_rating(self):
+        data = self.cleaned_data['tto_rating']
+        if data is None:
+            raise ValidationError("This field is required.")
+        return data

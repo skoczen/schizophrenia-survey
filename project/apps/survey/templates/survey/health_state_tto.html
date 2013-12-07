@@ -5,6 +5,10 @@
     <h1>Health State #{{ screen.health_state_number}}</h1>
     
     <h2>Time Trade-off</h2>    
-    <p><a href="{% url "survey:next_screen" %}" class="btn btn-primary next_button">Next</a></p>
+    <form action="." method="POST">
+        {% csrf_token %}
+        {{form}}
+        <p><input type="submit" class="btn btn-primary next_button" value="Next" /></p>
+    </form>
 </div>
 {% endblock %}
