@@ -10,6 +10,7 @@ class AdminDashboardTest(E2ETestCase):
         self.visit(reverse("survey:admin_dashboard"))
 
         # Log in
+        self.sleep(1)
         self.ele("#id_username").fill(user.username)
         self.ele("#id_password").fill(password)
         self.sleep(0.1)
