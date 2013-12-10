@@ -3,14 +3,24 @@
 {% block content %}
 <div class="basic_info">
     <h1>Basic Information</h1>
-    <form action="." method="POST" >
+    <form action="." method="POST" class="form-group form-horizontal " role="form">
         {% csrf_token %}
         <table>
-            {{form.as_table}}
-            <tr><td colspan="55">
-                <input type="submit" class="next_button" />
-            </td></tr>
-        </table>
+            {% for field in form %}
+            <div class="form-group">
+                <label class="col-sm-4" for="id_{{field.name}}">{{field.label}}</label>
+                <div class="col-sm-8">
+                    {{field}}
+                    {% if field.errors %}<br/>{{field.errors}}{% endif %}
+                </div>
+                
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                  <button type="submit" class="btn btn-default">Next</button>
+                </div>
+            </div>
     </form>
 </div>
 {% endblock %}

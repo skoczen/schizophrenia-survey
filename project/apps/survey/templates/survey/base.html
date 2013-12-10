@@ -13,6 +13,54 @@
 {% endcompress %}
 {% endblock %}
 
+{% block nav %}
+{% if survey_response %}
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <a class="navbar-brand" href="{% url "survey:next_screen" %}">Survey</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li><a href="{{ next_url }}" class="">About</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Health States <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li role="presentation" ><a role="menuitem" href="{% url "survey:health_state_intro" 1 %}">Introduction</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_1 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 1 %}">Health State 1</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_2 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 2 %}">Health State 2</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_3 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 3 %}">Health State 3</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_4 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 4 %}">Health State 4</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_5 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 5 %}">Health State 5</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_6 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 6 %}">Health State 6</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_7 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 7 %}">Health State 7</a></li>
+          <li role="presentation" class="{% if not survey_response.started_state_8 %}disabled{% endif %}"><a role="menuitem" href="{% url "survey:health_state_intro" 8 %}">Health State 8</a></li>
+          {# <li class="divider"></li> #}
+          {# <li><a href="#">One more separated link</a></li> #}
+        </ul>
+      </li>
+    </ul>
+    <ul class="nav navbar-right ">
+      <li><a href="{% url "survey:next_screen" %}" class="navbar-btn">Next Screen</a></li>
+    </ul>
+    <ul class="nav navbar-right ">
+        <li>
+       <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{ survey_response.percent_complete }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ survey_response.percent_complete }}%;">
+            <span class="">{{ survey_response.percent_complete|floatformat:"0" }}%</span>
+          </div>
+        </div>
+    </li>
+    </ul>
+ 
+  </div><!-- /.navbar-collapse -->
+
+</nav>
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="unknown_code">

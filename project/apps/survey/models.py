@@ -145,6 +145,10 @@ class SurveyResponse(models.Model):
     def ratings(self):
         return self.healthstaterating_set.all()
 
+    @property
+    def percent_complete(self):
+        return 100.0 * self.last_screen_id / len(SCREENS)
+
     def get_screen_for(self, screen_id):
         for s in SCREENS:
             if s["id"] == screen_id:
@@ -214,6 +218,36 @@ class SurveyResponse(models.Model):
     completed_state_7.short_description = "7"
     completed_state_8.boolean = True
     completed_state_8.short_description = "8"
+
+    def _started_state(self, order):
+        try:
+            return self.ratings.get(order=order).started()
+        except HealthStateRating.DoesNotExist:
+            return False
+
+    def started_state_1(self):
+        return self._started_state(1)
+
+    def started_state_2(self):
+        return self._started_state(2)
+
+    def started_state_3(self):
+        return self._started_state(3)
+
+    def started_state_4(self):
+        return self._started_state(4)
+
+    def started_state_5(self):
+        return self._started_state(5)
+
+    def started_state_6(self):
+        return self._started_state(6)
+
+    def started_state_7(self):
+        return self._started_state(7)
+
+    def started_state_8(self):
+        return self._started_state(8)
 
     def started(self):
         return self.start_time is not None

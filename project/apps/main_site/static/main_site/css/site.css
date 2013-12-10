@@ -1,3 +1,15 @@
+/* Nav */
+.nav .progress {
+    width: 100px;
+    float: left;
+    margin: 15px 10px 0 0;
+}
+.nav.right_nav {
+    display: block;
+    text-align: right;
+    width: 200px;
+}
+
 .survey_placeholder {
     margin: 50px 0;
     text-align: center;

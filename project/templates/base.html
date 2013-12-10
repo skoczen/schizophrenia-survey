@@ -29,10 +29,19 @@
 <body>
   {% analytical_body_top %}
   <div id="container">
+    <div id="nav">
+        {% block nav %}{% endblock %}
+    </div>
     <div id="main" role="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
     	{% block content %}
 
     	{% endblock %}
+                </div>
+            </div>
+        </div>
         <a class="reset_survey" href="{% url 'survey:temp_logout' %}">Reset Survey</a>
     </div>
   </div> 
