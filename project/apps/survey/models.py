@@ -147,7 +147,7 @@ class SurveyResponse(models.Model):
 
     @property
     def percent_complete(self):
-        return 100.0 * self.last_screen_id / len(SCREENS)
+        return 100.0 * self.last_screen_id / (len(SCREENS) - 2)
 
     def get_screen_for(self, screen_id):
         for s in SCREENS:

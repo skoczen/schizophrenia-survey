@@ -25,6 +25,7 @@ def entrance(request):
     try:
         survey_id = None
         exit_url = None
+        section = "intro"
         if not request.user.is_authenticated():
             survey_id = request.REQUEST["survey_id"]
             exit_url = request.REQUEST["exit_url"]
@@ -77,9 +78,20 @@ def specific_screen(request):
     return HttpResponseRedirect(reverse("survey:next_screen"))
 
 
+@render_to("survey/about.html")
+def about(request):
+    try:
+        section = "about"
+        survey_response = SurveyResponse.objects.get(user=request.user)
+    except:
+        pass
+    return locals()
+
+
 @render_to("survey/demographics.html")
 def demographics(request):
     try:
+        section = "intro"
         survey_response = SurveyResponse.objects.get(user=request.user)
         survey_response.mark_screen_complete("entrance")
         if request.method == "POST":
@@ -119,7 +131,9 @@ def read_only_screen(request, screen_complete_name, mark_complete=True):
 
 @render_to("survey/introduction.html")
 def introduction(request):
-    return read_only_screen(request, "introduction")
+    context = read_only_screen(request, "introduction")
+    context['section'] = "intro"
+    return context
 
 
 def health_state_screen(request, section, health_state_number, mark_complete=True):
@@ -141,7 +155,9 @@ def health_state_screen(request, section, health_state_number, mark_complete=Tru
 
         context['health_state'] = health_state
         context['health_state_rating'] = health_state_rating
+        context['intro'] = "hs_%s" % health_state_number
     return context
+
 
 @render_to("survey/health_state_intro.html")
 def health_state_intro(request, health_state_number):

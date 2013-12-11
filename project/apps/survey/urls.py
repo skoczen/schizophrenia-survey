@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 
     url(r'^$', survey_views.entrance, name='entrance'),
     url(r'^basic-info/$', survey_views.demographics, name='demographics'),
+    url(r'^about/$', survey_views.about, name='about'),
     url(r'^introduction/$', survey_views.introduction, name='introduction'),
     url(r'^health-state/(?P<health_state_number>\d+)/intro/$', survey_views.health_state_intro, name='health_state_intro'),
     url(r'^health-state/(?P<health_state_number>\d+)/details/$', survey_views.health_state_video, name='health_state_video'),

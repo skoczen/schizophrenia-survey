@@ -4,6 +4,12 @@
     float: left;
     margin: 15px 10px 0 0;
 }
+.nav .progress .outside {
+    display: inline-block;
+    color: #CCC;
+    margin: 2px 0 0 3px;
+    
+}
 .nav.right_nav {
     display: block;
     text-align: right;
