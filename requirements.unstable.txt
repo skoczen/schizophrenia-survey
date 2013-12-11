@@ -21,3 +21,6 @@ psycopg2
 south
 splinter
 versiontools
+
+# Dev only
+django-debug-toolbar

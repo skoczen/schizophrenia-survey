@@ -144,7 +144,7 @@ def health_state_screen(request, section, health_state_number, mark_complete=Tru
         health_state = getattr(sr, "state_%s" % health_state_number)
         health_state_rating = sr.ratings.get(health_state=health_state)
 
-        if section == "outro" and health_state_rating.start_time is None:
+        if health_state_rating.start_time is None:
             health_state_rating.start_time = now
         if mark_complete:
             setattr(health_state_rating, "%s_completed" % section, True)
@@ -155,7 +155,7 @@ def health_state_screen(request, section, health_state_number, mark_complete=Tru
 
         context['health_state'] = health_state
         context['health_state_rating'] = health_state_rating
-        context['intro'] = "hs_%s" % health_state_number
+        context['section'] = "hs_%s" % health_state_number
     return context
 
 
