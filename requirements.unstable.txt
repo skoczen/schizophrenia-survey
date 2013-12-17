@@ -3,6 +3,7 @@ boto
 django-celery-with-redis
 django<1.6
 django-analytical>=0.12.1
+django-admin-bootstrapped
 django-annoying
 django_compressor
 django-heroku-memcacheify

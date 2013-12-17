@@ -11,6 +11,7 @@ from survey.tasks import update_health_sequences, generate_csv
 @user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 1)
 @render_to("survey/administration/upload_sequence.html")
 def upload_sequence(request):
+    section = "upload_sequence"
     ActionLog.objects.create(user=request.user, action="Upload Sequence Visit")
     uploaded = False
     if request.method == "POST":
@@ -29,6 +30,7 @@ def upload_sequence(request):
 @user_passes_test(lambda u: u.groups.filter(name='Survey Administrators').count() == 1)
 @render_to("survey/administration/dashboard.html")
 def dashboard(request):
+    section = "dashboard"
     stats = SurveyAggregateStats.first
     ActionLog.objects.create(user=request.user, action="Dashboard View")
     return locals()
@@ -37,6 +39,7 @@ def dashboard(request):
 @user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 1)
 @render_to("survey/administration/data_export.html")
 def data_export(request):
+    section = "data_export"
     data_exports = SurveyExport.objects.all().order_by("-export_date")
     ActionLog.objects.create(user=request.user, action="Data Export Visit")
     return locals()

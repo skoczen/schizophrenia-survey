@@ -54,6 +54,8 @@ def update_aggregate_tasks():
                             total_dwell_minutes += (hsr.finish_time - s.start_time).total_seconds() / 60.0
                             break
 
+        print total_progress
+        print total_started
         # last_updated
         stats.completion_rate = 100.0 * total_finished / total_started
         stats.average_survey_progress = 100.0 * total_progress / total_started

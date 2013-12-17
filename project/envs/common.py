@@ -74,7 +74,6 @@ SECRET_KEY = '^7!$isr6jd!o+mgl1qy@+8197dm53uhp2i*vp8k4p#*g#8mg1n'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,15 +83,18 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'linaro_django_pagination.middleware.PaginationMiddleware',
+    'survey.middleware.GroupMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    join(abspath(PROJECT_ROOT),"templates"),
+    join(abspath(PROJECT_ROOT), "templates"),
 )
 
 INSTALLED_APPS = (
+    'django_admin_bootstrapped.bootstrap3',
+    'django_admin_bootstrapped',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
