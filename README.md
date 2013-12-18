@@ -123,5 +123,6 @@ Backups
 
 Backups are done nightly via heroku's pgbackups.  Backup archives are stored in the `qi-schizophrenia-data` s3 bucket on AWS.
 
+Historical backups are handled by the `qi-schizophrenia-backups` app, a version of [pgbackups-archive-app](https://github.com/kbaum/pgbackups-archive-app)
 
 Documentation on manual backups and restores are found [in the pgbackups documentation](https://devcenter.heroku.com/articles/pgbackups#import-export).
