@@ -121,7 +121,7 @@ If you need to manually deploy, run `fab deploy`  or `fab deploy target:staging`
 Backups
 =======
 
-Backups are done nightly via heroku's pgbackups.  Backup archives are stored in the `qi-schizophrenia-data` s3 bucket on AWS.
+Backups are done nightly via heroku's pgbackups.  Backup archives are stored in a backup bucket on AWS s3.
 
 Historical backups are handled by the `qi-schizophrenia-backups` app, a version of [pgbackups-archive-app](https://github.com/kbaum/pgbackups-archive-app)
 
