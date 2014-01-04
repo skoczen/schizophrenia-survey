@@ -2,7 +2,11 @@ $(function(){
 	window.VAS = window.VAS || {};
 	
 	VAS.init = function() {
-		VAS.setValue(50);
+		var val = VAS.getValue();
+		if (!val) {
+			val = 50;
+		}
+		VAS.setValue(val);
 		VAS.mouseIsDown = false;
 		$(".vas .vas_container").mousedown(VAS.handleDown);
 		$(".vas .vas_container").mouseup(VAS.handleUp);
