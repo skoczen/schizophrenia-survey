@@ -46,8 +46,8 @@ def wip():
 
 
 def setup_db():
-    local_venv("dropdb schizophrenia --if-exists")
-    local_venv("createdb schizophrenia")
+    local_venv("dropdb schizophrenia --if-exists -U skoczen")
+    local_venv("createdb schizophrenia -U skoczen")
     local_venv("./manage.py syncdb --noinput")
     local_venv("./manage.py loaddata permissions.json")
     local_venv("./manage.py loaddata dev_user.json")

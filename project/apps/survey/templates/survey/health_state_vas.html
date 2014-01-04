@@ -1,14 +1,37 @@
 {% extends "survey/base.html" %}{% load compress %}
 
+{% block js %}{{ block.super }}
+{% compress js %}
+<script src="{{STATIC_URL}}survey/js/vas.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block css %}{{ block.super }}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}survey/css/vas.css" />
+{% endcompress %}
+{% endblock %}
+
+
 {% block content %}
 <div class="entrance hs_{{health_state.number}}">
     <h1>Health State #{{ screen.health_state_number}}</h1>
     
     <h2>Vertical Scale</h2>
-    <form action="." method="POST">
-        {% csrf_token %}
-        {{form}}
-        <p><input type="submit" class="btn btn-primary next_button" value="Next" /></p>
-    </form>
+    <div class="row">
+    	<div class="col-md-8">
+		    <form action="." method="POST" class="vasForm">
+		    	{# <div class="hidden"> #}
+		        {% csrf_token %}
+		        {{form}}
+		    	{# </div> #}
+		        <p><input type="submit" class="btn btn-primary next_button" value="Next" /></p>
+		    </form>
+		</div>
+		<div class="col-md-4">
+			{% include "survey/_vas.html" %}
+		</div>
+	</div>
 </div>
 {% endblock %}

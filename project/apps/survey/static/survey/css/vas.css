@@ -1,0 +1,19 @@
+.vas {
+	height: 300px;
+	width: 100px;
+	position: relative;
+}
+
+.vas .vas_container {
+	height: 100%;
+	border: 1px solid #333;
+	position: relative;
+}
+
+.vas .vas_container .filled_bar {
+	width: 100%;
+	background-color: #006699;
+	position: absolute;
+	bottom: 0px;
+}
+

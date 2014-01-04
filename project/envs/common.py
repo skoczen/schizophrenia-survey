@@ -23,7 +23,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'schizophrenia',
-        'USER': '',
+        'USER': 'skoczen',
         'PASSWORD': DB_PASSWORD,
         'HOST': '',
         'PORT': '',
