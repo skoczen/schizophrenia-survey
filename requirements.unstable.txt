@@ -10,6 +10,7 @@ django-heroku-memcacheify
 django-heroku-postgresify
 django-extensions
 django-nose
+django-tinymce
 django-selector
 django-staticfiles
 django-storages

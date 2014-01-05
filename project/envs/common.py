@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     "djcelery",
     "gunicorn",
     "linaro_django_pagination",
+    "tinymce",
     "south",
 
     "main_site",

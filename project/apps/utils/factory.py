@@ -356,19 +356,21 @@ class Factory(DjangoFunctionalFactory):
 
     @classmethod
     def health_state(cls, *args, **kwargs):
+        hs_name = cls.rand_name()
+        number = cls.rand_int()
         options = {
             "number": cls.rand_int(),
-            "name": cls.rand_str(),
+            "name": hs_name,
             "actor_is_male": cls.rand_bool(),
             "is_a_side_effect": cls.rand_bool(),
             "is_transitional": cls.rand_bool(),
             "severity_rating": cls.rand_int(),
             "video_url": cls.rand_domain(),
-            "title": cls.rand_str(),
-            "intro_body": cls.rand_str(),
-            "vas_body": cls.rand_str(),
-            "tto_body": cls.rand_str(),
-            "outro_body": cls.rand_str(),
+            "title": "Health State %s - %s" % (number, hs_name),
+            "intro_body": "This health state is for %s, a patient with the following symptoms:" % hs_name,
+            "vas_body": "Now, use the vertical scale to rate the quality of life for %s." % hs_name,
+            "tto_body": "Now, use the timeline tool to evaluate the quality of life for %s." % hs_name,
+            "outro_body": "Thank you for rating %s. <br/><br/>Click next to continue" % hs_name,
         }
         options.update(kwargs)
 

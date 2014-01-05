@@ -1,7 +1,9 @@
 from django.db import models
 from django.core.cache import cache
+from tinymce.models import HTMLField
 from .tasks import update_aggregate_tasks
 from .screens import SCREENS
+
 
 NEXT_SURVEY_PATH_KEY = "qi-next-survey-path-id"
 EDUCATION_CHOICES = [
@@ -20,6 +22,7 @@ HOUSEHOLD_INCOME_CHOICES = [
     ("Greater than 100,000", "Greater than 100,000"),
 ]
 
+
 class HealthStateSequenceUpload(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, blank=True)
     csv_file = models.FileField(upload_to="sequences")
@@ -36,10 +39,10 @@ class HealthState(models.Model):
     video_url = models.CharField(max_length=255, blank=True, null=True)
 
     title = models.CharField(max_length=255, blank=True, null=True)
-    intro_body = models.TextField(max_length=255, blank=True, null=True)
-    vas_body = models.TextField(max_length=255, blank=True, null=True)
-    tto_body = models.TextField(max_length=255, blank=True, null=True)
-    outro_body = models.TextField(max_length=255, blank=True, null=True)
+    intro_body = HTMLField(max_length=255, blank=True, null=True)
+    vas_body = HTMLField(max_length=255, blank=True, null=True)
+    tto_body = HTMLField(max_length=255, blank=True, null=True)
+    outro_body = HTMLField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
         return "Health State #%s" % self.number

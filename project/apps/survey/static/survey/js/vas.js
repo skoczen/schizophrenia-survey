@@ -37,11 +37,7 @@ $(function(){
         var eleTop = $(".vas .vas_container").offset().top;
         var height = $(".vas .vas_container").height();
         var yValue = height - (e.pageY - eleTop);
-        console.log(eleTop);
-        console.log(e.pageY);
-        console.log(yValue)
         percent = Math.round(100.0 * yValue / height);
-        console.log(percent);
         VAS.setValue(percent);
 	}
 

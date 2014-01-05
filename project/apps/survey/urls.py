@@ -3,6 +3,8 @@ from django.conf.urls.defaults import patterns, include, url
 from .views import survey_views, admin_views
 
 urlpatterns = patterns('',
+    url(r'^tinymce/', include('tinymce.urls')),
+
     url(r'^temp-logout$', survey_views.temp_logout, name='temp_logout'),
 
     url(r'^next-screen/$', survey_views.next_screen, name='next_screen'),
