@@ -45,7 +45,7 @@ class HealthState(models.Model):
     outro_body = HTMLField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
-        return "Health State #%s" % self.number
+        return "Health State #%s - %s" % (self.number, self.name)
 
 
 class SurveyPath(models.Model):
