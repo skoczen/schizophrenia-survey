@@ -29,23 +29,23 @@ class HomePageTest(E2ETestCase):
         self.ele(".next_button").click()
 
         for i in range(1, 9):
-            self.assertEquals(self.ele("h1").text, "Health State #%s" % i)
+            self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Introduction")
             selector = ".hs_%s" % getattr(self.survey_path_1, "state_%s" % i)
             assert self.browser.is_element_present_by_css(selector)
             self.ele(".next_button").click()
-            self.assertEquals(self.ele("h1").text, "Health State #%s" % i)
+            self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Video")
             self.ele(".next_button").click()
-            self.assertEquals(self.ele("h1").text, "Health State #%s" % i)
+            self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Vertical Scale")
             self.ele("#id_vas_rating").fill(Factory.rand_int())
             self.ele(".next_button").click()
-            self.assertEquals(self.ele("h1").text, "Health State #%s" % i)
+            self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Time Trade-off")
             self.ele("#id_tto_rating").fill(Factory.rand_int())
             self.ele(".next_button").click()
-            self.assertEquals(self.ele("h1").text, "Health State #%s" % i)
+            self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Transition")
             self.ele(".next_button").click()
 
@@ -62,7 +62,7 @@ class HomePageTest(E2ETestCase):
         self.assertEquals(self.ele("h1").text, "Introduction")
         self.ele(".next_button").click()
 
-        self.assertEquals(self.ele("h1").text, "Health State #1")
+        self.assertIn("Health State #1", self.ele("h1").text)
         assert self.browser.is_element_present_by_css(".hs_%s" % self.survey_path_1.state_1)
 
         self.browser.cookies.delete()
@@ -76,5 +76,5 @@ class HomePageTest(E2ETestCase):
         self.assertEquals(self.ele("h1").text, "Introduction")
         self.ele(".next_button").click()
 
-        self.assertEquals(self.ele("h1").text, "Health State #1")
+        self.assertIn("Health State #1", self.ele("h1").text)
         assert self.browser.is_element_present_by_css(".hs_%s" % self.survey_path_2.state_1)
