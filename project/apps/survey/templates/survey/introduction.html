@@ -4,6 +4,6 @@
 <div class="introduction">
     <h1>Introduction</h1>
     <a href="{% url "survey:next_screen" %}" class="next_button btn btn-primary">Next</a>
-    <p>{{health_state.intro_body}}</p>
+    <p>{{health_state.intro_body|safe}}</p>
 </div>
 {% endblock %}

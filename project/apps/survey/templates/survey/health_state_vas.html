@@ -21,7 +21,7 @@
     <h2>Vertical Scale</h2>
     <div class="row">
     	<div class="col-md-8">
-            <p>{{health_state.vas_body}}</p>
+            <p>{{health_state.vas_body|safe}}</p>
 		    <form action="." method="POST" class="vasForm">
 		    	{# <div class="hidden"> #}
 		        {% csrf_token %}
