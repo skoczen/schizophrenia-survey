@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="entrance hs_{{health_state.number}}">
-    <h1>Health State #{{ screen.health_state_number}}</h1>
+    <h1>Health State #{{ screen.health_state_number}} - {{health_state.name}}</h1>
     <h2>Video</h2>
     <p><a href="{% url "survey:next_screen" %}" class="btn btn-primary next_button">Next</a></p>
 </div>
