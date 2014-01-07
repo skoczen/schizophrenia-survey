@@ -1,8 +1,32 @@
 {% extends "survey/base.html" %}{% load compress %}
-
 {% block content %}
 <div class="introduction">
     <h1>Introduction</h1>
+    
+    <p>Hello. I am Dr. Chavez. I'm going to introduce you to some patients of mine who have schizophrenia. I 
+    am doing this to understand how you see the problems caused by schizophrenia. We want your opinion 
+    about how good or bad it might be to live with certain symptoms. There are no right or wrong answers.
+    Many people believe that schizophrenia means "split personality" but this isn't true. Schizophrenia is a 
+    severe mental illness caused by an imbalance of the chemicals in the brain. This affects how people see 
+    reality, how they relate to others, and how they conduct everyday tasks.</p>
+    
+    <p>There are three types of symptoms commonly seen in schizophrenia. These are called positive, negative, 
+    and cognitive. <b>Positive</b> symptoms are psychological problems that have been <b>added</b> as a result of the 
+    illness. These can include hearing voices or seeing visions. A person with positive symptoms might hear 
+    a “special message”, just for him, on the radio or he might believe that he is being followed by the FBI. 
+    <b>Negative</b> symptoms are the result of what a person has <b>lost</b> because of schizophrenia. Someone with 
+    negative symptoms has difficulty reaching out and relating to other people. They may seem withdrawn or 
+    distant and their emotions are flat. They may speak and behave like a machine or robot. The third type 
+    of symptom is seen in a person's <b>cognitive</b> ability, and by that I mean the ability to think or reason. A 
+    person can be so confused by a whirlwind of thoughts that they can't finish a sentence. They might string 
+    together loosely connected ideas, and they may appear to lack common sense. For example, when 
+    asked what a proverb means, such as “people who live in glass houses shouldn’t throw stones,” a person 
+    with schizophrenia might respond with “throwing stones is bad”, which would be missing the point.</p>
+
+    <p>It can be difficult for someone with any of these symptoms to function in society. Schizophrenia typically 
+    strikes young men in their late teens and women in their late twenties. It's one of the most disabling 
+    illnesses faced by young adults. Fortunately, there are a number of medications that can help. The 
+    purpose of this survey is to learn how you would evaluate the symptoms of schizophrenia.</p>
     <a href="{% url "survey:next_screen" %}" class="next_button btn btn-primary">Next</a>
 </div>
 {% endblock %}

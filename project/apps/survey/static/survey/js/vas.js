@@ -9,8 +9,8 @@ $(function(){
 		VAS.setValue(val);
 		VAS.mouseIsDown = false;
 		$(".vas .vas_container").mousedown(VAS.handleDown);
-		$(".vas .vas_container").mouseup(VAS.handleUp);
-		$(".vas .vas_container").mousemove(VAS.handleMove);
+		$("body").mouseup(VAS.handleUp);
+		$("body").mousemove(VAS.handleMove);
 	}
 
 	VAS.setValue = function (value) {
@@ -38,6 +38,13 @@ $(function(){
         var height = $(".vas .vas_container").height();
         var yValue = height - (e.pageY - eleTop);
         percent = Math.round(100.0 * yValue / height);
+        if (percent > 100) {
+            percent = 100;
+        } else { 
+            if (percent < 0) {
+                percent = 0;
+            }
+        }
         VAS.setValue(percent);
 	}
 

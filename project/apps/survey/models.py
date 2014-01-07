@@ -44,6 +44,9 @@ class HealthState(models.Model):
     tto_body = HTMLField(max_length=255, blank=True, null=True)
     outro_body = HTMLField(max_length=255, blank=True, null=True)
 
+    class Meta:
+        ordering = ("number",)
+
     def __unicode__(self):
         return "Health State #%s - %s" % (self.number, self.name)
 

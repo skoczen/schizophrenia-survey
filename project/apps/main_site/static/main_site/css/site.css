@@ -94,7 +94,10 @@
 .dashboard .dashboard_block .insufficient_data {
     font-size: 20px;
     color: #999;
-
+}
+.fields .controls.cols-sm-9 .checkbox input {
+    margin-left: 15px;
+    float: none;
 }
 
 /* Data Export */

@@ -83,7 +83,7 @@
                     {% if not is_popup %}
                     <div id="content" class="{% block coltype %}colM{% endblock %}">
                         {% block pretitle %}{% endblock %}
-                        {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+                        {% block content_title %}{% if title and title != "Log in" %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
                         {% block content %}
                         {% block object-tools %}{% endblock %}
                         {{ content }}
