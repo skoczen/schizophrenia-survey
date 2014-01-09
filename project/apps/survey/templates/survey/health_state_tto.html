@@ -20,17 +20,17 @@
     
     <h2>Timeline</h2>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12">
             <p>{{health_state.tto_body|safe}}</p>
             <p>Click on the life course you would prefer.</p>
             {% include "survey/_tto.html" %}
 
 
             <form action="." method="POST" class="ttoForm">
-                {# <div class="hidden"> #}
+                <div class="hidden">
                 {% csrf_token %}
                 {{form}}
-                {# </div> #}
+                </div>
                 <p><input type="submit" class="btn btn-primary next_button tto_next" value="Next" /></p>
             </form>
         </div>

@@ -161,7 +161,7 @@ def _csv_row(r):
             hs.tto_rating,
             hs.intro_completed,
             hs.intro_completed_time,
-            hs.video_completed,
+            hs.video_watched,
             hs.video_completed_time,
             hs.vas_completed,
             hs.vas_completed_time,

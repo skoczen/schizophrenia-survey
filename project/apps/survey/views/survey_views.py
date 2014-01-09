@@ -172,6 +172,11 @@ def health_state_video(request, health_state_number):
 @render_to("survey/health_state_vas.html")
 def health_state_vas(request, health_state_number):
     base_context = health_state_screen(request, "vas", health_state_number, mark_complete=False)
+    hsr = base_context["health_state_rating"]
+    hsr.video_watched = True
+    hsr.video_completed_time = datetime.datetime.now()
+    hsr.save()
+    base_context["health_state_rating"] = hsr
 
     if request.method == "POST":
         form = VASForm(request.POST, instance=base_context["health_state_rating"])
@@ -210,7 +215,6 @@ def health_state_tto(request, health_state_number):
 @render_to("survey/health_state_outro.html")
 def health_state_outro(request, health_state_number):
     return health_state_screen(request, "outro", health_state_number)
-
 
 @render_to("survey/complete.html")
 def complete(request):

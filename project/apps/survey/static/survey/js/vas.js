@@ -1,12 +1,20 @@
 $(function(){
 	window.VAS = window.VAS || {};
-	
+
 	VAS.init = function() {
 		var val = VAS.getValue();
+        var unset = false;
 		if (!val) {
 			val = 50;
+            unset = true;
 		}
+
 		VAS.setValue(val);
+
+        if (unset) {
+            $(".next_button").attr("disabled", "disabled");
+        }
+
 		VAS.mouseIsDown = false;
 		$(".vas .vas_container").mousedown(VAS.handleDown);
 		$("body").mouseup(VAS.handleUp);
@@ -16,7 +24,10 @@ $(function(){
 	VAS.setValue = function (value) {
 		var containerHeight = $(".vas .vas_container").height();
 		$(".vas .filled_bar").height(containerHeight * (value / 100));
+        value = Math.round(value);
 		$("#id_vas_rating").val(value);
+        $(".big_rating .number").html(value)
+        $(".next_button").removeAttr("disabled");
 	}
 	VAS.getValue = function() {
 		return $("#id_vas_rating").val();

@@ -430,6 +430,7 @@ class Factory(DjangoFunctionalFactory):
                     hsr.intro_completed_time = cls.rand_date()
                     hsr.video_completed = cls.rand_bool()
                     if hsr.video_completed:
+                        hsr.video_watched = True
                         hsr.video_completed_time = cls.rand_date()
                         hsr.vas_completed = cls.rand_bool()
                         if hsr.vas_completed:

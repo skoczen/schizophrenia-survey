@@ -112,7 +112,7 @@ class CurrentPageContextTest(ClearedTransactionTestCase):
                 r.tto_rating,
                 r.intro_completed,
                 r.intro_completed_time,
-                r.video_completed,
+                r.video_watched,
                 r.video_completed_time,
                 r.vas_completed,
                 r.vas_completed_time,

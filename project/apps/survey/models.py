@@ -147,6 +147,8 @@ class SurveyResponse(models.Model):
                 setattr(self, "state_%s" % i, hs)
                 HealthStateRating.objects.create(survey_response=self, health_state=hs, order=i)
 
+            self.save()
+
     @property
     def ratings(self):
         return self.healthstaterating_set.all()
@@ -278,8 +280,9 @@ class HealthStateRating(models.Model):
     intro_completed = models.BooleanField(default=False)
     intro_completed_time = models.DateTimeField(blank=True, null=True)
 
-    video_completed = models.BooleanField(default=False)
-    video_completed_time = models.DateTimeField(blank=True, null=True)
+    video_completed = models.BooleanField(default=False)  # The video screen was loaded.
+    video_watched = models.BooleanField(default=False)    # The video was watched
+    video_completed_time = models.DateTimeField(blank=True, null=True)  # The time the video was done being watched.
 
     vas_completed = models.BooleanField(default=False)
     vas_completed_time = models.DateTimeField(blank=True, null=True)
