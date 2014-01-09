@@ -36,6 +36,7 @@ class HomePageTest(E2ETestCase):
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Video")
+            self.sleep(7)  # Wait for super slow video to finish.
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Vertical Scale")
