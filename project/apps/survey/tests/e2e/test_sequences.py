@@ -1,3 +1,4 @@
+import datetime
 from utils.test_helpers import E2ETestCase, wip, skip
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
@@ -36,16 +37,18 @@ class HomePageTest(E2ETestCase):
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Video")
-            if self.browser.is_element_not_present_by_css(".next_button:not([disabled])", 15):
-                assert False == "Video finished playing"
+            end_wait = datetime.datetime.now() + datetime.timedelta(seconds=15)
+            while self.browser.is_element_not_present_by_css(".next_button:not([disabled])") and end_wait > datetime.datetime.now():
+                self.sleep(0.5)
+            if end_wait < datetime.datetime.now():
+                assert False == "Video finished playing."
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Vertical Scale")
-            self.ele("#id_vas_rating").fill(Factory.rand_int())
+            self.ele(".vas_container").click()
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Timeline")
-            self.ele("#id_tto_rating").fill(Factory.rand_int())
             self.ele(".timeline.top").click()
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
