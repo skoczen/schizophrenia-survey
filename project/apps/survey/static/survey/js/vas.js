@@ -26,7 +26,7 @@ $(function(){
 		$(".vas .filled_bar").height(containerHeight * (value / 100));
         value = Math.round(value);
 		$("#id_vas_rating").val(value);
-        $(".big_rating .number").html(value)
+        $(".big_rating .number").html(value);
         $(".next_button").removeAttr("disabled");
 	}
 	VAS.getValue = function() {

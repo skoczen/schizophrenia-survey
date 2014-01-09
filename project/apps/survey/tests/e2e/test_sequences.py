@@ -36,7 +36,8 @@ class HomePageTest(E2ETestCase):
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Video")
-            self.sleep(7)  # Wait for super slow video to finish.
+            if self.browser.is_element_not_present_by_css(".next_button:not([disabled])", 15):
+                assert False == "Video finished playing"
             self.ele(".next_button").click()
             self.assertIn("Health State #%s" % i, self.ele("h1").text)
             self.assertEquals(self.ele("h2").text, "Vertical Scale")
