@@ -19,6 +19,20 @@
 	bottom: 0px;
 }
 
+.vas .vas_container .top_anchor {
+	position: absolute; 
+	top: 0;
+	left: 110px;
+	overflow: visible;
+	white-space: nowrap;
+}
+.vas .vas_container .bottom_anchor {
+	position: absolute; 
+	bottom: 0;
+	left: 110px;
+	overflow: visible;
+	white-space: nowrap;
+}
 .big_rating {
     margin-top: 80px;
     text-align: center;

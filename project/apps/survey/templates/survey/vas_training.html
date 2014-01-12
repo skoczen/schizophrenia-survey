@@ -15,19 +15,16 @@
 
 
 {% block content %}
-<div class="entrance hs_{{health_state.number}}">
-    <h1>Health State #{{ screen.health_state_number}} - {{health_state.name}}</h1>
-    
+<div class="basic_info">
+    <h1>Rating Scale training</h1>
+
     <h2>Rating Scale</h2>
     <div class="row">
     	<div class="col-xs-4">
-            <p>{{health_state.vas_body|safe}}</p>
+            <p>Training text</p>
 		    <form action="." method="POST" class="vasForm">
 		    	<div class="hidden">
-		        {% csrf_token %}
-		        {{form}}
 		    	</div>
-		        <p><input type="submit" class="btn btn-primary next_button" value="Next" /></p>
 		    </form>
 		</div>
 		<div class="col-xs-8">

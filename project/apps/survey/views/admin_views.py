@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from survey.models import SurveyAggregateStats, SurveyExport, ActionLog
-from survey.forms import HealthStateSequenceUploadForm
+from survey.models import SurveyAggregateStats, SurveyExport, ActionLog, SurveyConfig
+from survey.forms import HealthStateSequenceUploadForm, SurveyConfigForm
 from survey.tasks import update_health_sequences, generate_csv
 
 
@@ -25,6 +25,25 @@ def upload_sequence(request):
     else:
         form = HealthStateSequenceUploadForm()
     return locals()
+
+@user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 1)
+@render_to("survey/administration/survey_config.html")
+def survey_config(request):
+    section = "survey_config"
+    survey_config = SurveyConfig.first()
+    ActionLog.objects.create(user=request.user, action="Survey Config Visit")
+    saved = False
+    if request.method == "POST":
+        form = SurveyConfigForm(request.POST, request.FILES, instance=survey_config)
+
+        if form.is_valid():
+            survey_config = form.save()
+            saved = True
+            ActionLog.objects.create(user=request.user, action="Survey Config Changed")
+    else:
+        form = SurveyConfigForm(instance=survey_config)
+    return locals()
+
 
 
 @user_passes_test(lambda u: u.groups.filter(name='Survey Administrators').count() == 1)

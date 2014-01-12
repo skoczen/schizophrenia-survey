@@ -1,0 +1,39 @@
+{% extends "survey/base.html" %}{% load compress %}
+
+{% block js %}{{ block.super }}
+{% compress js %}
+<script src="{{STATIC_URL}}survey/js/tto.js"></script>
+{% endcompress %}
+{% endblock %}
+
+
+{% block css %}{{ block.super }}
+{% compress css %}
+<link rel="stylesheet" href="{{STATIC_URL}}survey/css/tto.css" />
+{% endcompress %}
+{% endblock %}
+
+
+{% block content %}
+<div class="entrance hs_{{health_state.number}}">
+    <h1>Health State #{{ screen.health_state_number}} - {{health_state.name}}</h1>
+    
+    <h2>Timeline</h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>{{health_state.tto_body|safe}}</p>
+            <p>Click on the life course you would prefer.</p>
+            {% include "survey/_tto.html" %}
+
+
+            <form action="." method="POST" class="ttoForm">
+                <div class="hidden">
+                {% csrf_token %}
+                {{form}}
+                </div>
+                <p><a href="{% url 'survey:next_screen' %}" type="submit" class="btn btn-primary next_button tto_next" >Next</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

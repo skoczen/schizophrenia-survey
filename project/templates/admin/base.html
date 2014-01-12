@@ -57,6 +57,7 @@
                     <li class="{% if section == "data_export" %}active{% endif %}"><a href="{% url "survey:admin_data_export" %}" >Data Export</a></li>
                 {% endif %}
                 {% if request.session.survey_superadmin %}
+                  <li class="{% if section == "survey_config" %}active{% endif %}"><a href="{% url "survey:admin_survey_config" %}" >Survey Config</a></li>
                   <li class="{% if section == "upload_sequence" %}active{% endif %}"><a href="{% url "survey:upload_sequence" %}" >Upload Survey Paths</a></li>
                   <li class="{% if section == "survye_paths" %}active{% endif %}"><a href="{% url "admin:survey_surveypath_changelist" %}" >Edit Survey Paths</a></li>
                   <li class="{% if section == "health_states" %}active{% endif %}"><a href="{% url "admin:survey_healthstate_changelist" %}" >Edit Health States</a></li>

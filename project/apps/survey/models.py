@@ -22,6 +22,20 @@ HOUSEHOLD_INCOME_CHOICES = [
     ("Greater than 100,000", "Greater than 100,000"),
 ]
 
+class SurveyConfig(models.Model):
+
+    top_anchor_label = models.CharField(max_length=200, default="Perfect health")
+    bottom_anchor_label = models.CharField(max_length=200, default="Worst imaginable health")
+    about_the_study_text = models.TextField(blank=True, null=True, help_text='The text that will show on the "about the study" page.')
+
+    @classmethod
+    def first(cls):
+        if cls.objects.count() > 0:
+            return cls.objects.all()[0]
+        else:
+            cls.objects.create()
+            return cls.first()
+
 
 class HealthStateSequenceUpload(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True, blank=True)
@@ -40,6 +54,7 @@ class HealthState(models.Model):
 
     title = models.CharField(max_length=255, blank=True, null=True)
     intro_body = HTMLField(max_length=255, blank=True, null=True)
+    video_body = HTMLField(max_length=255, blank=True, null=True)
     vas_body = HTMLField(max_length=255, blank=True, null=True)
     tto_body = HTMLField(max_length=255, blank=True, null=True)
     outro_body = HTMLField(max_length=255, blank=True, null=True)

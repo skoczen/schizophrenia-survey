@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import login, authenticate
 
 from survey.forms import HealthStateSequenceUploadForm, DemographicForm, VASForm, TTOForm
-from survey.models import SurveyResponse
+from survey.models import SurveyResponse, SurveyConfig
 from survey.screens import SCREENS
 from survey.tasks import update_health_sequences
 from django.contrib.auth.models import User
@@ -55,6 +55,7 @@ def entrance(request):
             return HttpResponseRedirect(reverse("survey:next_screen"))
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
+    survey_config = SurveyConfig.first()
     return locals()
 
 
@@ -83,6 +84,7 @@ def about(request):
     try:
         section = "about"
         survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_config = SurveyConfig.first()
     except:
         pass
     return locals()
@@ -93,6 +95,7 @@ def demographics(request):
     try:
         section = "intro"
         survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_config = SurveyConfig.first()
         survey_response.mark_screen_complete("entrance")
         if request.method == "POST":
             form = DemographicForm(request.POST, instance=survey_response)
@@ -111,10 +114,24 @@ def demographics(request):
     return context
 
 
+@render_to("survey/vas_training.html")
+def vas_training(request):
+    context = read_only_screen(request, "vas_training")
+    context['section'] = "training"
+    return context
+
+@render_to("survey/tto_training.html")
+def tto_training(request):
+    context = read_only_screen(request, "tto_training")
+    context['section'] = "training"
+    return context
+
+
 def read_only_screen(request, screen_complete_name, mark_complete=True):
     try:
 
         survey_response = SurveyResponse.objects.get(user=request.user)
+        survey_config = SurveyConfig.first()
         screen = survey_response.get_screen_for(screen_complete_name)
         if screen["order"] > survey_response.last_screen_id + 1:
             return HttpResponseRedirect(reverse("survey:next_screen"))

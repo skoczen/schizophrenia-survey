@@ -368,6 +368,7 @@ class Factory(DjangoFunctionalFactory):
             "video_url": cls.rand_domain(),
             "title": "Health State %s - %s" % (number, hs_name),
             "intro_body": "This health state is for %s, a patient with the following symptoms:" % hs_name,
+            "video_body": "This text is a description of %s's symptoms, as you can see in the video." % hs_name,
             "vas_body": "Now, use the vertical scale to rate the quality of life for %s." % hs_name,
             "tto_body": "Now, use the timeline tool to evaluate the quality of life for %s." % hs_name,
             "outro_body": "Thank you for rating %s. <br/><br/>Click next to continue." % hs_name,

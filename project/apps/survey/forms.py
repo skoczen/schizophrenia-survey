@@ -1,11 +1,14 @@
 from django.forms import ModelForm, ValidationError
-from .models import HealthStateSequenceUpload, SurveyResponse, HealthStateRating
+from .models import HealthStateSequenceUpload, SurveyResponse, HealthStateRating, SurveyConfig
 
 
 class HealthStateSequenceUploadForm(ModelForm):
     class Meta:
         model = HealthStateSequenceUpload
 
+class SurveyConfigForm(ModelForm):
+    class Meta:
+        model = SurveyConfig
 
 class DemographicForm(ModelForm):
     class Meta:
