@@ -31,7 +31,7 @@
                 {% csrf_token %}
                 {{form}}
                 </div>
-                <p><a href="{% url 'survey:next_screen' %}" type="submit" class="btn btn-primary next_button tto_next" >Next</a></p>
+                <p><a href="{% url 'survey:next_screen' screen.order %}" type="submit" class="btn btn-primary next_button tto_next" >Next</a></p>
             </form>
         </div>
     </div>

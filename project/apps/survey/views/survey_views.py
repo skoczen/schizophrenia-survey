@@ -26,6 +26,7 @@ def entrance(request):
         survey_id = None
         exit_url = None
         section = "intro"
+        screen = SCREENS[0]
         if not request.user.is_authenticated():
             survey_id = request.REQUEST["survey_id"]
             exit_url = request.REQUEST["exit_url"]
@@ -52,14 +53,27 @@ def entrance(request):
             survey_response.exit_url = exit_url
         survey_response.save()
         if survey_response.last_screen_id != 0:
-            return HttpResponseRedirect(reverse("survey:next_screen"))
+            return HttpResponseRedirect(reverse("survey:go_to_current"))
     except:
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     survey_config = SurveyConfig.first()
     return locals()
 
 
-def next_screen(request):
+def next_screen(request, last_screen_id=None):
+    try:
+        
+        if last_screen_id:
+            screen = SCREENS[int(last_screen_id) + 1]
+        else:
+            survey_response = SurveyResponse.objects.get(user=request.user)
+            screen = SCREENS[survey_response.last_screen_id + 1]
+        return HttpResponseRedirect(reverse(screen["reverse_url"], args=screen["reverse_args"]))
+    except SurveyResponse.DoesNotExist:
+        return HttpResponseRedirect(reverse("survey:unknown_code"))
+
+
+def go_to_current(request):
     try:
         survey_response = SurveyResponse.objects.get(user=request.user)
         screen = SCREENS[survey_response.last_screen_id + 1]
@@ -76,13 +90,14 @@ def specific_screen(request):
             screen = SCREENS[screen_id]
             return HttpResponseRedirect(reverse(screen["reverse_url"], args=screen["reverse_args"]))
 
-    return HttpResponseRedirect(reverse("survey:next_screen"))
+    return HttpResponseRedirect(reverse("survey:go_to_current"))
 
 
 @render_to("survey/about.html")
 def about(request):
     try:
         section = "about"
+        screen = SCREENS[0]
         survey_response = SurveyResponse.objects.get(user=request.user)
         survey_config = SurveyConfig.first()
     except:
@@ -94,6 +109,7 @@ def about(request):
 def demographics(request):
     try:
         section = "intro"
+        screen = SCREENS[1]
         survey_response = SurveyResponse.objects.get(user=request.user)
         survey_config = SurveyConfig.first()
         survey_response.mark_screen_complete("entrance")
@@ -104,7 +120,7 @@ def demographics(request):
                 survey_response.demographics_complete = True
                 survey_response.save()
                 survey_response.mark_screen_complete("demographics")
-                return HttpResponseRedirect(reverse("survey:next_screen"))
+                return HttpResponseRedirect(reverse("survey:go_to_current"))
         else:
             form = DemographicForm(instance=survey_response)
         context = locals()
@@ -113,28 +129,15 @@ def demographics(request):
         return HttpResponseRedirect(reverse("survey:unknown_code"))
     return context
 
-
-@render_to("survey/vas_training.html")
-def vas_training(request):
-    context = read_only_screen(request, "vas_training")
-    context['section'] = "training"
-    return context
-
-@render_to("survey/tto_training.html")
-def tto_training(request):
-    context = read_only_screen(request, "tto_training")
-    context['section'] = "training"
-    return context
-
-
 def read_only_screen(request, screen_complete_name, mark_complete=True):
     try:
 
         survey_response = SurveyResponse.objects.get(user=request.user)
         survey_config = SurveyConfig.first()
         screen = survey_response.get_screen_for(screen_complete_name)
+        is_current_screen = SCREENS[survey_response.last_screen_id + 1] == screen
         if screen["order"] > survey_response.last_screen_id + 1:
-            return HttpResponseRedirect(reverse("survey:next_screen"))
+            return HttpResponseRedirect(reverse("survey:go_to_current"))
 
         context = locals()
         if mark_complete:
@@ -152,6 +155,17 @@ def introduction(request):
     context['section'] = "intro"
     return context
 
+@render_to("survey/vas_training.html")
+def vas_training(request):
+    context = read_only_screen(request, "vas_training")
+    context['section'] = "training"
+    return context
+
+@render_to("survey/tto_training.html")
+def tto_training(request):
+    context = read_only_screen(request, "tto_training")
+    context['section'] = "training"
+    return context
 
 def health_state_screen(request, section, health_state_number, mark_complete=True):
     now = datetime.datetime.now()
@@ -202,7 +216,7 @@ def health_state_vas(request, health_state_number):
 
             # Mark complete
             health_state_screen(request, "vas", health_state_number)
-            return HttpResponseRedirect(reverse("survey:next_screen"))
+            return HttpResponseRedirect(reverse("survey:next_screen", args=(base_context["screen"]["order"], )))
     else:
         form = VASForm(instance=base_context["health_state_rating"])
 
@@ -221,7 +235,7 @@ def health_state_tto(request, health_state_number):
 
             # Mark complete
             health_state_screen(request, "tto", health_state_number)
-            return HttpResponseRedirect(reverse("survey:next_screen"))
+            return HttpResponseRedirect(reverse("survey:next_screen", args=(base_context["screen"]["order"], )))
     else:
         form = TTOForm(instance=base_context["health_state_rating"])
 
@@ -236,6 +250,7 @@ def health_state_outro(request, health_state_number):
 @render_to("survey/complete.html")
 def complete(request):
     try:
+        screen = SCREENS[-1]
         survey_response = SurveyResponse.objects.get(user=request.user)
         survey_response.finish_time = datetime.datetime.now()
         survey_response.save()
@@ -248,18 +263,3 @@ def complete(request):
 def unknown_code(request):
     return locals()
 
-
-@user_passes_test(lambda u: u.groups.filter(name='Survey Super-Admins').count() == 1, login_url='/administration/')
-@render_to("survey/administration/upload_sequence.html")
-def upload_sequence(request):
-    uploaded = False
-    if request.method == "POST":
-        form = HealthStateSequenceUploadForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            upload = form.save()
-            update_health_sequences(upload.pk)
-            uploaded = True
-    else:
-        form = HealthStateSequenceUploadForm()
-    return locals()

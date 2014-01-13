@@ -14,6 +14,6 @@ VIDEO.has_been_played = {{ health_state_rating.video_watched|yesno:"true,false,f
     <h2>Video</h2>
     <div id="player"></div>
     <p>{{health_state.video_body|safe}}</p>
-    <p><a href="{% url "survey:next_screen" %}" class="btn btn-primary next_button">Next</a></p>
+    <p><a href="{% url "survey:next_screen" screen.order %}" class="btn btn-primary next_button">Next</a></p>
 </div>
 {% endblock %}

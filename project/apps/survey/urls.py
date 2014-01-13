@@ -7,7 +7,8 @@ urlpatterns = patterns('',
 
     url(r'^temp-logout$', survey_views.temp_logout, name='temp_logout'),
 
-    url(r'^next-screen/$', survey_views.next_screen, name='next_screen'),
+    url(r'^next-screen/(?P<last_screen_id>\d+)/$', survey_views.next_screen, name='next_screen'),
+    url(r'^current-screen/$', survey_views.go_to_current, name='go_to_current'),
     url(r'^screen/$', survey_views.specific_screen, name='specific_screen'),
 
     url(r'^$', survey_views.entrance, name='entrance'),
