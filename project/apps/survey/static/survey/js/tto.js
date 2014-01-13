@@ -3,15 +3,22 @@ $(function(){
     TTO.max_years = 20;
 	TTO.init = function() {
 		var val = TTO.getValue();
+        var had_value = false;
 		if (!val) {
 			val = TTO.max_years; // Rang is 0-20
-		}
+		} else {
+            had_value = true;
+        }
+        console.log(had_value)
 		TTO.setValue(val);
         $(".tto .tto_container .timeline.top").click(TTO.handleTopClick);
         $(".tto .tto_container .timeline.bottom").click(TTO.handleBottomClick);
         $(".tto_next.next_button").attr("disabled", "disabled");
         $(".reset_button").click(TTO.reset);
         TTO.enabled = true;
+        if (had_value) {
+            TTO.handleTopClick();
+        }
 	};
     TTO.reset = function() {
         TTO.enabled = true;
